@@ -9,504 +9,822 @@
 <title>保養日誌</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500&family=DM+Serif+Display:ital@0;1&display=swap');
-
   :root {
-    --cream: #FAF7F2;
-    --warm-white: #FDF9F4;
-    --parchment: #F3EDE3;
-    --blush: #E8D5C4;
-    --rose-muted: #C9A99A;
-    --rose: #B8806A;
-    --rose-deep: #8B5E52;
-    --sage: #8FA68B;
-    --sage-light: #D4E0D2;
-    --ink: #2A2420;
-    --ink-mid: #5C4A42;
-    --ink-light: #9B8880;
-    --gold: #C4A96B;
-    --gold-light: #EDD9A3;
-    --amber-soft: #F0E4C8;
-    --lavender: #D4CCE8;
-    --lavender-deep: #8070A8;
-    --night-bg: #1E1A2E;
-    --night-card: #2A2540;
-    --night-border: #3D3660;
-    --safe-top: env(safe-area-inset-top, 0px);
-    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --cream:#FAF7F2;--warm-white:#FDF9F4;--parchment:#F3EDE3;--blush:#E8D5C4;
+    --rose-muted:#C9A99A;--rose:#B8806A;--rose-deep:#8B5E52;
+    --sage:#8FA68B;--sage-light:#D4E0D2;
+    --ink:#2A2420;--ink-mid:#5C4A42;--ink-light:#9B8880;
+    --gold:#C4A96B;--gold-light:#EDD9A3;--amber-soft:#F0E4C8;
+    --lavender:#D4CCE8;--lavender-deep:#8070A8;
+    --night-bg:#1E1A2E;--night-card:#2A2540;--night-border:#3D3660;
+    --safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px);
   }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%;background:var(--cream);font-family:'Noto Serif TC',serif;color:var(--ink);overflow:hidden}
+  .app{display:flex;flex-direction:column;height:100%;height:100dvh;max-width:430px;margin:0 auto;background:var(--warm-white);position:relative;overflow:hidden}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  /* ── Bottom nav ── */
+  .bottom-nav{display:flex;flex-shrink:0;border-top:1px solid var(--blush);background:var(--warm-white);padding:0 0 calc(var(--safe-bottom)) 0}
+  .nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;padding:10px 0 8px;border:none;background:transparent;cursor:pointer;gap:3px;font-family:'Noto Serif TC',serif;font-size:10px;color:var(--ink-light);transition:color .2s}
+  .nav-btn.active{color:var(--rose-deep)}
+  .nav-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+  .night-nav{background:var(--night-bg)!important;border-color:var(--night-border)!important}
+  .night-nav .nav-btn{color:#5A5070}
+  .night-nav .nav-btn.active{color:#C8BEE8}
 
-  html, body {
-    height: 100%;
-    background: var(--cream);
-    font-family: 'Noto Serif TC', serif;
-    color: var(--ink);
-    overflow: hidden;
-  }
+  /* ── Screens ── */
+  .screen{display:none;flex:1;flex-direction:column;overflow:hidden}
+  .screen.visible{display:flex}
 
-  .app {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    height: 100dvh;
-    max-width: 430px;
-    margin: 0 auto;
-    background: var(--warm-white);
-    position: relative;
-    overflow: hidden;
-  }
+  /* ══════════════ ROUTINE SCREEN ══════════════ */
+  .header{padding:calc(var(--safe-top) + 14px) 16px 0;background:var(--warm-white);flex-shrink:0}
+  .header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding:0 4px}
+  .app-title{font-family:'DM Serif Display',serif;font-size:22px;color:var(--rose-deep);letter-spacing:.02em}
+  .today-date{font-size:11px;color:var(--ink-light);letter-spacing:.03em;font-weight:300;text-align:right;line-height:1.5}
+  .day-scroll{display:flex;justify-content:center;gap:4px;padding-bottom:14px;width:100%}
+  .day-chip{flex:1;max-width:52px;display:flex;flex-direction:column;align-items:center;padding:6px 0 7px;border-radius:12px;border:1px solid var(--blush);background:transparent;cursor:pointer;transition:all .2s}
+  .day-chip.active{background:var(--rose-deep);border-color:var(--rose-deep)}
+  .day-chip.has-done{border-color:var(--sage)}
+  .day-chip .day-label{font-size:9px;color:var(--ink-light);font-weight:400;margin-bottom:1px}
+  .day-chip.active .day-label{color:rgba(255,255,255,.75)}
+  .day-chip .day-num{font-family:'DM Serif Display',serif;font-size:13px;color:var(--ink);line-height:1.1}
+  .day-chip.active .day-num{color:#fff}
+  .day-chip.has-done .day-num{color:var(--sage)}
+  .day-chip.has-done.active .day-num{color:#fff}
+  .done-dot{width:3px;height:3px;border-radius:50%;background:var(--sage);margin-top:3px;opacity:0}
+  .day-chip.has-done .done-dot{opacity:1}
+  .day-chip.active .done-dot{background:rgba(255,255,255,.6)}
+  .mode-bar{display:flex;padding:0 20px 12px;gap:8px;background:var(--warm-white);flex-shrink:0}
+  .mode-tab{flex:1;padding:8px 4px;border-radius:10px;border:1px solid var(--blush);background:transparent;font-family:'Noto Serif TC',serif;font-size:12px;color:var(--ink-mid);cursor:pointer;transition:all .2s;text-align:center;font-weight:400}
+  .mode-tab.active{background:var(--rose-deep);border-color:var(--rose-deep);color:#fff}
+  .mode-tab.night-active{background:var(--lavender-deep);border-color:var(--lavender-deep);color:#fff}
+  .progress-section{padding:0 20px 12px;flex-shrink:0;background:var(--warm-white)}
+  .progress-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+  .progress-label{font-size:11px;color:var(--ink-light);letter-spacing:.04em}
+  .progress-count{font-size:11px;color:var(--rose);font-weight:500}
+  .progress-track{height:3px;border-radius:2px;background:var(--parchment);overflow:hidden}
+  .progress-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--rose-muted),var(--rose));transition:width .4s cubic-bezier(.4,0,.2,1)}
+  .divider{height:1px;background:var(--parchment);margin:0 20px;flex-shrink:0}
+  .step-list{flex:1;overflow-y:auto;padding:16px 20px calc(var(--safe-bottom) + 16px);scrollbar-width:none;-ms-overflow-style:none}
+  .step-list::-webkit-scrollbar{display:none}
+  .step-card{display:flex;gap:14px;align-items:flex-start;padding:14px;border-radius:14px;border:1px solid var(--blush);background:var(--warm-white);margin-bottom:10px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+  .step-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px 0 0 3px;background:var(--blush);transition:background .2s}
+  .step-card.is-next::before{background:var(--rose)}
+  .step-card.is-done::before{background:var(--sage)}
+  .step-card.is-done{background:var(--parchment);border-color:var(--blush);opacity:.65}
+  .step-card.is-next{border-color:var(--rose-muted);background:#FEF8F5}
+  .step-card.night-card{border-color:var(--night-border);background:var(--night-card)}
+  .step-card.night-card::before{background:var(--night-border)}
+  .step-card.night-card.is-next{border-color:#7060B8;background:#2F2A48}
+  .step-card.night-card.is-next::before{background:var(--lavender-deep)}
+  .step-card.night-card.is-done{background:#221F35;opacity:.55}
+  .prod-icon{width:56px;height:56px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .step-body{flex:1;min-width:0}
+  .step-top-row{display:flex;align-items:center;gap:6px;margin-bottom:4px}
+  .step-num{font-size:10px;font-weight:500;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--parchment);color:var(--ink-mid);flex-shrink:0}
+  .is-next .step-num{background:var(--rose-deep);color:#fff}
+  .night-card .step-num{background:var(--night-border);color:#C8BEE8}
+  .night-card.is-next .step-num{background:var(--lavender-deep);color:#fff}
+  .step-badge{font-size:9px;font-weight:500;padding:2px 7px;border-radius:8px;letter-spacing:.03em}
+  .badge-new{background:#D4E0D2;color:#2A4F28}
+  .badge-old{background:var(--lavender);color:#3D2F7A}
+  .badge-sample{background:var(--gold-light);color:#5A3E00}
+  .badge-warn{background:#FDDDD9;color:#7A2820}
+  .badge-opt{background:var(--parchment);color:var(--ink-mid)}
+  .badge-mask{background:#F0EAD6;color:#5A4020;font-weight:700}
+  .step-name{font-size:14px;font-weight:500;color:var(--ink);line-height:1.35;margin-bottom:2px}
+  .night-card .step-name{color:#E8E0F5}
+  .is-done .step-name{text-decoration:line-through}
+  .step-brand{font-size:10px;color:var(--ink-light);letter-spacing:.04em;margin-bottom:5px;font-weight:300}
+  .night-card .step-brand{color:#7A6EA8}
+  .step-tip{font-size:11.5px;color:var(--ink-light);line-height:1.55;font-weight:300}
+  .night-card .step-tip{color:#8A7EAA}
+  .check-circle{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--blush);display:flex;align-items:center;justify-content:center;transition:all .2s}
+  .is-done .check-circle{background:var(--sage);border-color:var(--sage)}
+  .night-card .check-circle{border-color:var(--night-border)}
+  .night-card.is-done .check-circle{background:var(--lavender-deep);border-color:var(--lavender-deep)}
+  .done-banner{padding:20px;text-align:center;border-radius:14px;background:var(--sage-light);border:1px solid var(--sage);margin-top:4px}
+  .done-banner .done-title{font-family:'DM Serif Display',serif;font-size:20px;color:var(--rose-deep);margin-bottom:4px}
+  .done-banner.night-done{background:#2A2540;border-color:var(--lavender-deep)}
+  .done-banner.night-done .done-title{color:#C8BEE8}
+  .reminder-box{margin-bottom:14px;padding:8px 12px;border-radius:10px;font-size:11px;line-height:1.5;border:1px dashed var(--blush);background:rgba(232,213,196,.1);color:var(--ink-mid);text-align:center}
+  .reminder-box strong{color:var(--rose-deep);font-weight:500}
+  .night-reminder{border-color:var(--night-border);background:rgba(61,54,96,.2);color:#8A7EAA}
+  .night-reminder strong{color:#C8BEE8}
+  .reset-btn{width:100%;padding:11px;border-radius:10px;border:1px solid var(--blush);background:transparent;font-family:'Noto Serif TC',serif;font-size:12px;color:var(--ink-light);cursor:pointer;margin-top:12px;transition:all .2s;letter-spacing:.04em}
 
-  /* Header */
-  .header {
-    padding: calc(var(--safe-top) + 14px) 16px 0;
-    background: var(--warm-white);
-    flex-shrink: 0;
-  }
+  /* Night mode */
+  .night-mode-bg{background:var(--night-bg)!important}
+  .night-header{background:var(--night-bg)!important}
+  .night-mode-bar{background:var(--night-bg)!important}
+  .night-mode-bar .mode-tab{border-color:var(--night-border)!important;color:#7A6EA8!important}
+  .night-mode-bar .mode-tab.active,.night-mode-bar .mode-tab.night-active{color:#fff!important}
+  .night-progress{background:var(--night-bg)!important}
+  .night-progress .progress-track{background:#2A2540}
+  .night-progress .progress-fill{background:linear-gradient(90deg,#7060A8,#C8BEE8)}
+  .night-progress .progress-label{color:#8A7EAA!important}
+  .night-progress .progress-count{color:#C8BEE8!important}
+  .night-divider{background:#2A2540!important}
+  .app-title-night{color:#C8BEE8!important}
+  .today-date-night{color:#5A5070!important}
+  .day-chip-night{border-color:#3D3660!important}
+  .day-chip-night .day-label{color:#5A5070!important}
+  .day-chip-night .day-num{color:#C8BEE8!important}
+  .day-chip-night.active{background:var(--lavender-deep)!important;border-color:var(--lavender-deep)!important}
+  .day-chip-night.active .day-num,.day-chip-night.active .day-label{color:#fff!important}
+  .night-step-list{background:var(--night-bg)!important}
+  .night-reset{border-color:#3D3660!important;color:#5A5070!important}
 
-  .header-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 16px;
-    padding: 0 4px;
-  }
+  /* ══════════════ CALENDAR SCREEN ══════════════ */
+  .cal-screen{overflow-y:auto;padding:calc(var(--safe-top) + 14px) 16px calc(var(--safe-bottom) + 16px)}
+  .cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding:0 4px}
+  .cal-title{font-family:'DM Serif Display',serif;font-size:20px;color:var(--rose-deep)}
+  .cal-nav-btn{width:32px;height:32px;border-radius:50%;border:1px solid var(--blush);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ink-mid)}
+  .cal-nav-btn:active{background:var(--parchment)}
+  .cal-weekdays{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:6px}
+  .cal-wday{text-align:center;font-size:10px;color:var(--ink-light);padding:4px 0;font-weight:400}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+  .cal-cell{aspect-ratio:1;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;position:relative;border:1px solid transparent;transition:all .15s;background:transparent}
+  .cal-cell:active{background:var(--parchment)}
+  .cal-cell.today{border-color:var(--rose-muted)}
+  .cal-cell.today .cal-date{color:var(--rose-deep);font-weight:500}
+  .cal-cell.future{opacity:.35;cursor:default}
+  .cal-cell.empty{cursor:default}
+  .cal-date{font-size:13px;color:var(--ink);font-family:'DM Serif Display',serif;line-height:1}
+  .cal-dots{display:flex;gap:2px;margin-top:3px;height:5px;align-items:center;justify-content:center}
+  .cal-dot{width:4px;height:4px;border-radius:50%;flex-shrink:0}
+  .dot-day{background:var(--rose-muted)}
+  .dot-night{background:var(--lavender-deep)}
+  .dot-makeup{background:var(--gold)}
+  .dot-note{background:var(--sage)}
+  .cal-cell.has-all .cal-date{color:var(--sage)}
+  .cal-legend{display:flex;gap:12px;margin:16px 4px 20px;flex-wrap:wrap}
+  .legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--ink-light)}
+  .legend-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 
-  .app-title {
-    font-family: 'DM Serif Display', serif;
-    font-size: 22px;
-    color: var(--rose-deep);
-    letter-spacing: 0.02em;
-  }
+  /* Day detail modal */
+  .day-modal{position:absolute;bottom:0;left:0;right:0;background:var(--warm-white);border-radius:20px 20px 0 0;border-top:1px solid var(--blush);padding:0 20px calc(var(--safe-bottom) + 20px);transform:translateY(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);z-index:100;max-height:85dvh;overflow-y:auto}
+  .day-modal.open{transform:translateY(0)}
+  .modal-handle{width:36px;height:4px;border-radius:2px;background:var(--blush);margin:12px auto 16px}
+  .modal-date-title{font-family:'DM Serif Display',serif;font-size:20px;color:var(--rose-deep);margin-bottom:4px}
+  .modal-subtitle{font-size:11px;color:var(--ink-light);margin-bottom:20px;font-weight:300}
+  .modal-section{margin-bottom:20px}
+  .modal-section-title{font-size:11px;font-weight:500;color:var(--ink-mid);letter-spacing:.05em;text-transform:uppercase;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--parchment)}
+  .done-pills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+  .done-pill{font-size:11px;padding:4px 10px;border-radius:14px;border:1px solid var(--blush);color:var(--ink-mid);background:var(--parchment)}
+  .done-pill.active{background:var(--sage-light);border-color:var(--sage);color:#2A4F28}
+  .note-area{width:100%;min-height:80px;border:1px solid var(--blush);border-radius:10px;padding:10px 12px;font-family:'Noto Serif TC',serif;font-size:13px;color:var(--ink);background:var(--warm-white);resize:none;line-height:1.6;outline:none;-webkit-appearance:none}
+  .note-area:focus{border-color:var(--rose-muted)}
+  .note-area::placeholder{color:var(--ink-light);font-weight:300}
+  .mood-row{display:flex;gap:8px;margin-bottom:12px}
+  .mood-btn{flex:1;padding:8px 4px;border-radius:10px;border:1px solid var(--blush);background:transparent;font-size:18px;cursor:pointer;transition:all .15s;text-align:center}
+  .mood-btn.selected{border-color:var(--rose);background:var(--parchment);transform:scale(1.05)}
+  .save-btn{width:100%;padding:12px;border-radius:12px;border:none;background:var(--rose-deep);color:#fff;font-family:'Noto Serif TC',serif;font-size:14px;font-weight:500;cursor:pointer;margin-top:4px;transition:opacity .2s}
+  .save-btn:active{opacity:.85}
+  .close-modal-btn{position:absolute;top:14px;right:20px;width:28px;height:28px;border-radius:50%;border:1px solid var(--blush);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ink-light)}
+  .modal-overlay{position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.3);z-index:99;opacity:0;pointer-events:none;transition:opacity .3s}
+  .modal-overlay.open{opacity:1;pointer-events:all}
 
-  .today-date {
-    font-size: 11px;
-    color: var(--ink-light);
-    letter-spacing: 0.03em;
-    font-weight: 300;
-    text-align: right;
-    line-height: 1.5;
-  }
+  /* ══════════════ STATS SCREEN ══════════════ */
+  .stats-screen{overflow-y:auto;padding:calc(var(--safe-top) + 14px) 16px calc(var(--safe-bottom) + 80px)}
+  .stats-title{font-family:'DM Serif Display',serif;font-size:22px;color:var(--rose-deep);margin-bottom:20px;padding:0 4px}
+  .stat-card{background:var(--parchment);border-radius:14px;padding:16px;margin-bottom:14px}
+  .stat-card-title{font-size:11px;font-weight:500;color:var(--ink-light);letter-spacing:.05em;margin-bottom:12px}
+  .streak-num{font-family:'DM Serif Display',serif;font-size:48px;color:var(--rose-deep);line-height:1}
+  .streak-label{font-size:12px;color:var(--ink-light);margin-top:4px;font-weight:300}
+  .stat-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--blush)}
+  .stat-row:last-child{border-bottom:none}
+  .stat-row-label{font-size:13px;color:var(--ink-mid)}
+  .stat-row-val{font-size:13px;font-weight:500;color:var(--rose-deep)}
+  .month-bar{margin-top:6px}
+  .bar-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+  .bar-label{font-size:11px;color:var(--ink-light);width:28px;flex-shrink:0}
+  .bar-track{flex:1;height:6px;border-radius:3px;background:var(--blush);overflow:hidden}
+  .bar-fill{height:100%;border-radius:3px;background:var(--rose-muted);transition:width .4s}
+  .bar-fill.night-bar{background:var(--lavender-deep)}
+  .bar-count{font-size:10px;color:var(--ink-light);width:20px;text-align:right;flex-shrink:0}
+  .recent-notes{margin-top:0}
+  .note-entry{padding:12px 0;border-bottom:1px solid var(--parchment)}
+  .note-entry:last-child{border-bottom:none}
+  .note-entry-date{font-size:10px;color:var(--ink-light);margin-bottom:4px;font-weight:300;display:flex;align-items:center;gap:6px}
+  .note-entry-text{font-size:13px;color:var(--ink-mid);line-height:1.6;font-weight:300}
+  .mood-display{font-size:16px}
 
-  /* Day selector */
-  .day-scroll {
-    display: flex;
-    justify-content: center;
-    gap: 4px;
-    padding-bottom: 14px;
-    width: 100%;
-  }
-
-  .day-chip {
-    flex: 1;
-    max-width: 52px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 6px 0 7px;
-    border-radius: 12px;
-    border: 1px solid var(--blush);
-    background: transparent;
-    cursor: pointer;
-    transition: all .2s;
-  }
-  .day-chip.active {
-    background: var(--rose-deep);
-    border-color: var(--rose-deep);
-  }
-  .day-chip.has-done {
-    border-color: var(--sage);
-  }
-  .day-chip .day-label {
-    font-size: 9px;
-    color: var(--ink-light);
-    font-weight: 400;
-    margin-bottom: 1px;
-  }
-  .day-chip.active .day-label { color: rgba(255,255,255,.75); }
-  .day-chip .day-num {
-    font-family: 'DM Serif Display', serif;
-    font-size: 13px;
-    color: var(--ink);
-    line-height: 1.1;
-  }
-  .day-chip.active .day-num { color: #fff; }
-  .day-chip.has-done .day-num { color: var(--sage); }
-  .day-chip.has-done.active .day-num { color: #fff; }
-
-  .done-dot {
-    width: 3px; height: 3px; border-radius: 50%;
-    background: var(--sage);
-    margin-top: 3px;
-    opacity: 0;
-  }
-  .day-chip.has-done .done-dot { opacity: 1; }
-  .day-chip.active .done-dot { background: rgba(255,255,255,.6); }
-
-  /* Mode tabs */
-  .mode-bar {
-    display: flex;
-    padding: 0 20px 12px;
-    gap: 8px;
-    background: var(--warm-white);
-    flex-shrink: 0;
-  }
-
-  .mode-tab {
-    flex: 1;
-    padding: 8px 4px;
-    border-radius: 10px;
-    border: 1px solid var(--blush);
-    background: transparent;
-    font-family: 'Noto Serif TC', serif;
-    font-size: 12px;
-    color: var(--ink-mid);
-    cursor: pointer;
-    transition: all .2s;
-    text-align: center;
-    font-weight: 400;
-  }
-  
-  .mode-tab.active {
-    background: var(--rose-deep);
-    border-color: var(--rose-deep);
-    color: #ffffff;
-  }
-
-  .mode-tab.night-active {
-    background: var(--lavender-deep);
-    border-color: var(--lavender-deep);
-    color: #ffffff;
-  }
-
-  /* Progress */
-  .progress-section {
-    padding: 0 20px 12px;
-    flex-shrink: 0;
-    background: var(--warm-white);
-  }
-  .progress-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 6px;
-  }
-  .progress-label {
-    font-size: 11px;
-    color: var(--ink-light);
-    letter-spacing: .04em;
-  }
-  .progress-count {
-    font-size: 11px;
-    color: var(--rose);
-    font-weight: 500;
-  }
-  .progress-track {
-    height: 3px;
-    border-radius: 2px;
-    background: var(--parchment);
-    overflow: hidden;
-  }
-  .progress-fill {
-    height: 100%;
-    border-radius: 2px;
-    background: linear-gradient(90deg, var(--rose-muted), var(--rose));
-    transition: width .4s cubic-bezier(.4,0,.2,1);
-  }
-
-  /* Divider */
-  .divider {
-    height: 1px;
-    background: var(--parchment);
-    margin: 0 20px 0;
-    flex-shrink: 0;
-  }
-
-  /* Step list */
-  .step-list {
-    flex: 1;
-    overflow-y: auto;
-    padding: 16px 20px calc(var(--safe-bottom) + 16px);
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-  .step-list::-webkit-scrollbar { display: none; }
-
-  /* Step Card styles */
-  .step-card {
-    display: flex; gap: 14px; align-items: flex-start; padding: 14px; border-radius: 14px;
-    border: 1px solid var(--blush); background: var(--warm-white); margin-bottom: 10px; cursor: pointer; transition: all .2s;
-    position: relative; overflow: hidden;
-  }
-  .step-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; border-radius: 3px 0 0 3px; background: var(--blush); transition: background .2s; }
-  .step-card.is-next::before { background: var(--rose); }
-  .step-card.is-done::before { background: var(--sage); }
-  .step-card.is-done { background: var(--parchment); border-color: var(--blush); opacity: .65; }
-  .step-card.is-next { border-color: var(--rose-muted); background: #FEF8F5; }
-
-  .step-card.night-card { border-color: var(--night-border); background: var(--night-card); }
-  .step-card.night-card::before { background: var(--night-border); }
-  .step-card.night-card.is-next { border-color: #7060B8; background: #2F2A48; }
-  .step-card.night-card.is-next::before { background: var(--lavender-deep); }
-  .step-card.night-card.is-done { background: #221F35; opacity: .55; }
-
-  .prod-icon { width: 56px; height: 56px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; position: relative; }
-  .step-body { flex: 1; min-width: 0; }
-  .step-top-row { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
-  .step-num { font-size: 10px; font-weight: 500; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--parchment); color: var(--ink-mid); flex-shrink: 0; }
-  .is-next .step-num { background: var(--rose-deep); color: #fff; }
-  .night-card .step-num { background: var(--night-border); color: #C8BEE8; }
-  .night-card.is-next .step-num { background: var(--lavender-deep); color: #fff; }
-
-  .step-badge { font-size: 9px; font-weight: 500; padding: 2px 7px; border-radius: 8px; letter-spacing: .03em; }
-  .badge-new { background: #D4E0D2; color: #2A4F28; }
-  .badge-old { background: var(--lavender); color: #3D2F7A; }
-  .badge-sample { background: var(--gold-light); color: #5A3E00; }
-  .badge-warn { background: #FDDDD9; color: #7A2820; }
-  .badge-opt { background: var(--parchment); color: var(--ink-mid); }
-  .badge-mask { background: #F0EAD6; color: #5A4020; font-weight: 700; }
-
-  .step-name { font-size: 14px; font-weight: 500; color: var(--ink); line-height: 1.35; margin-bottom: 2px; }
-  .night-card .step-name { color: #E8E0F5; }
-  .is-done .step-name { text-decoration: line-through; }
-  .step-brand { font-size: 10px; color: var(--ink-light); letter-spacing: .04em; margin-bottom: 5px; font-weight: 300; }
-  .night-card .step-brand { color: #7A6EA8; }
-  .step-tip { font-size: 11.5px; color: var(--ink-light); line-height: 1.55; font-weight: 300; }
-  .night-card .step-tip { color: #8A7EAA; }
-
-  .check-circle { width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--blush); display: flex; align-items: center; justify-content: center; transition: all .2s; }
-  .is-done .check-circle { background: var(--sage); border-color: var(--sage); }
-  .night-card .check-circle { border-color: var(--night-border); }
-  .night-card.is-done .check-circle { background: var(--lavender-deep); border-color: var(--lavender-deep); }
-
-  .done-banner { padding: 24px 20px; text-align: center; border-radius: 14px; background: var(--sage-light); border: 1px solid var(--sage); margin-top: 4px; }
-  .done-banner .done-title { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--rose-deep); margin-bottom: 4px; }
-  .done-banner.night-done { background: #2A2540; border-color: var(--lavender-deep); }
-  .done-banner.night-done .done-title { color: #C8BEE8; }
-
-  .section-note { display: flex; align-items: flex-start; gap: 8px; padding: 10px 14px; border-radius: 10px; margin-bottom: 14px; font-size: 12px; line-height: 1.6; font-weight: 300; }
-  .note-day { background: var(--amber-soft); color: var(--ink-mid); border-left: 3px solid var(--gold); }
-  .note-night { background: #2A2540; color: #C8BEE8; border-left: 3px solid var(--lavender-deep); }
-
-  /* Reminder Box */
-  .reminder-box {
-    margin-bottom: 14px; 
-    padding: 8px 12px;
-    border-radius: 10px;
-    font-size: 8px; 
-    line-height: 1.4;
-    border: 1px dashed var(--blush);
-    background: rgba(232, 213, 196, 0.1);
-    color: var(--ink-mid);
-    text-align: center;
-    word-break: break-all;
-  }
-  .reminder-box strong { color: var(--rose-deep); font-weight: 500; }
-  .night-reminder {
-    border-color: var(--night-border);
-    background: rgba(61, 54, 96, 0.2);
-    color: #8A7EAA;
-  }
-  .night-reminder strong { color: #C8BEE8; }
-
-  .reset-btn { width: 100%; padding: 11px; border-radius: 10px; border: 1px solid var(--blush); background: transparent; font-family: 'Noto Serif TC', serif; font-size: 12px; color: var(--ink-light); cursor: pointer; margin-top: 12px; transition: all .2s; letter-spacing: .04em; }
-  .complete-btn { background: var(--lavender-deep) !important; color: #fff !important; border-color: var(--lavender-deep) !important; margin-top: 8px; font-weight: 500; }
-
-  /* Night mode specific */
-  .night-mode-bg { background: var(--night-bg) !important; }
-  .night-header { background: var(--night-bg) !important; }
-  
-  .night-mode-bar { background: var(--night-bg) !important; }
-  .night-mode-bar .mode-tab { 
-    border-color: var(--night-border) !important; 
-    color: #7A6EA8 !important;
-  }
-  .night-mode-bar .mode-tab.active,
-  .night-mode-bar .mode-tab.night-active {
-    color: #ffffff !important;
-  }
-
-  .night-progress { background: var(--night-bg) !important; }
-  .night-progress .progress-track { background: #2A2540; }
-  .night-progress .progress-fill { background: linear-gradient(90deg, #7060A8, #C8BEE8); }
-  .night-progress .progress-label { color: #8A7EAA !important; }
-  .night-progress .progress-count { color: #C8BEE8 !important; }
-  
-  .night-divider { background: #2A2540 !important; }
-  .app-title-night { color: #C8BEE8 !important; }
-  .today-date-night { color: #5A5070 !important; }
-  .day-chip-night { border-color: #3D3660 !important; }
-  .day-chip-night .day-label { color: #5A5070 !important; }
-  .day-chip-night .day-num { color: #C8BEE8 !important; }
-  .day-chip-night.active { background: var(--lavender-deep) !important; border-color: var(--lavender-deep) !important; }
-  .day-chip-night.active .day-num, .day-chip-night.active .day-label { color: #fff !important; }
-  .night-step-list { background: var(--night-bg) !important; }
-  .night-reset { border-color: #3D3660 !important; color: #5A5070 !important; }
-
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-  .step-card { animation: fadeIn .2s ease; }
+  @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+  .step-card{animation:fadeIn .2s ease}
 </style>
 </head>
 <body>
 <div class="app" id="app">
-  <div class="header" id="header">
-    <div class="header-top">
-      <div class="app-title" id="appTitle">保養日誌</div>
-      <div class="today-date" id="todayDate"></div>
+
+  <!-- SCREEN 1: Routine -->
+  <div class="screen visible" id="screenRoutine">
+    <div class="header" id="header">
+      <div class="header-top">
+        <div class="app-title" id="appTitle">保養日誌</div>
+        <div class="today-date" id="todayDate"></div>
+      </div>
+      <div class="day-scroll" id="dayScroll"></div>
     </div>
-    <div class="day-scroll" id="dayScroll"></div>
+    <div class="mode-bar" id="modeBar">
+      <button class="mode-tab active" id="tabDay" onclick="setMode('day')">☀️ 日間</button>
+      <button class="mode-tab" id="tabNight" onclick="setMode('night')">🌙 夜間</button>
+      <button class="mode-tab" id="tabMakeup" onclick="setMode('makeup')">💄 化妝日</button>
+    </div>
+    <div class="progress-section" id="progressSection">
+      <div class="progress-row">
+        <span class="progress-label" id="progressLabel">今日步驟</span>
+        <span class="progress-count" id="progressCount">0 / 0</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill" style="width:0%"></div>
+      </div>
+    </div>
+    <div class="divider" id="divider"></div>
+    <div class="step-list" id="stepList"></div>
   </div>
 
-  <div class="mode-bar" id="modeBar">
-    <button class="mode-tab active" id="tabDay" onclick="setMode('day')">☀️ 日間</button>
-    <button class="mode-tab" id="tabNight" onclick="setMode('night')">🌙 夜間</button>
-    <button class="mode-tab" id="tabMakeup" onclick="setMode('makeup')">💄 化妝日</button>
+  <!-- SCREEN 2: Calendar -->
+  <div class="screen" id="screenCalendar">
+    <div class="cal-screen" id="calScreen">
+      <div class="cal-header">
+        <button class="cal-nav-btn" onclick="calPrevMonth()">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M10 4L6 8l4 4"/></svg>
+        </button>
+        <div class="cal-title" id="calTitle"></div>
+        <button class="cal-nav-btn" onclick="calNextMonth()">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 4l4 4-4 4"/></svg>
+        </button>
+      </div>
+      <div class="cal-weekdays">
+        <div class="cal-wday">一</div><div class="cal-wday">二</div><div class="cal-wday">三</div>
+        <div class="cal-wday">四</div><div class="cal-wday">五</div><div class="cal-wday">六</div>
+        <div class="cal-wday" style="color:var(--rose-muted)">日</div>
+      </div>
+      <div class="cal-grid" id="calGrid"></div>
+      <div class="cal-legend">
+        <div class="legend-item"><div class="legend-dot dot-day"></div>日間完成</div>
+        <div class="legend-item"><div class="legend-dot dot-night"></div>夜間完成</div>
+        <div class="legend-item"><div class="legend-dot dot-note"></div>有筆記</div>
+      </div>
+    </div>
+    <!-- Modal overlay -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
+    <!-- Day detail modal -->
+    <div class="day-modal" id="dayModal">
+      <div class="modal-handle"></div>
+      <button class="close-modal-btn" onclick="closeModal()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 2l10 10M12 2L2 12"/></svg>
+      </button>
+      <div class="modal-date-title" id="modalDateTitle"></div>
+      <div class="modal-subtitle" id="modalSubtitle">點選完成項目，記錄今日保養</div>
+      <div class="modal-section">
+        <div class="modal-section-title">完成項目</div>
+        <div id="modalDayPills"></div>
+        <div id="modalNightPills"></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">今日感受</div>
+        <div class="mood-row" id="moodRow">
+          <button class="mood-btn" data-mood="✨" onclick="selectMood('✨')">✨</button>
+          <button class="mood-btn" data-mood="😊" onclick="selectMood('😊')">😊</button>
+          <button class="mood-btn" data-mood="😐" onclick="selectMood('😐')">😐</button>
+          <button class="mood-btn" data-mood="😔" onclick="selectMood('😔')">😔</button>
+          <button class="mood-btn" data-mood="🔥" onclick="selectMood('🔥')">🔥</button>
+        </div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">筆記</div>
+        <textarea class="note-area" id="noteTextarea" placeholder="皮膚狀況、反應、感受…"></textarea>
+      </div>
+      <button class="save-btn" onclick="saveModalEntry()">儲存</button>
+    </div>
   </div>
 
-  <div class="progress-section" id="progressSection">
-    <div class="progress-row">
-      <span class="progress-label" id="progressLabel">今日步驟</span>
-      <span class="progress-count" id="progressCount">0 / 0</span>
-    </div>
-    <div class="progress-track">
-      <div class="progress-fill" id="progressFill" style="width:0%"></div>
-    </div>
+  <!-- SCREEN 3: Stats -->
+  <div class="screen" id="screenStats">
+    <div class="stats-screen" id="statsContent"></div>
   </div>
 
-  <div class="divider" id="divider"></div>
-
-  <div class="step-list" id="stepList"></div>
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav" id="bottomNav">
+    <button class="nav-btn active" id="navRoutine" onclick="goScreen('routine')">
+      <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      保養
+    </button>
+    <button class="nav-btn" id="navCalendar" onclick="goScreen('calendar')">
+      <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      月曆
+    </button>
+    <button class="nav-btn" id="navStats" onclick="goScreen('stats')">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      紀錄
+    </button>
+  </nav>
 </div>
 
 <script>
-function svgIcon(pathStr, isMask = false) {
-  const strokeColor = isMask ? '#FFFFFF' : 'var(--ink-mid)';
-  return `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="${strokeColor}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${pathStr}</svg>`;
-}
+// ══════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════
+function svgIcon(p,isMask=false){const s=isMask?'#FFF':'var(--ink-mid)';return`<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="${s}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`}
 
-const P = {
-  dafen: { name: '淨白煥采精露（大粉）', brand: 'ELIXIR 怡麗絲爾', tag: 'new', tagLabel: '新品', tip: '第一步化妝水，拍打至吸收', icon: svgIcon('<path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/>'), color: '#FBF0F5' },
-  haku: { name: '驅黑淨白露 IV（HAKU）', brand: 'HAKU 資生堂', tag: 'new', tagLabel: '新品', tip: '美白精華，輕拍全臉，重點顴骨', icon: svgIcon('<path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/>'), color: '#F0F4FB' },
-  meijiru: { name: '多效美肌乳（美肌乳）', brand: 'ELIXIR 怡麗絲爾', tag: 'opt', tagLabel: '新品（可選）', tip: '乳液，由內向外推開', icon: svgIcon('<path d="M8 10v10a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V10"/><path d="M12 10V6"/><path d="M10 6h4"/><path d="M12 2v4"/>'), color: '#FAF4EC' },
-  dakin: { name: 'A醇超能撫紋精華（大金條）', brand: 'ELIXIR 怡麗絲爾', tag: 'warn', tagLabel: '⚠️ 夜間限定', tip: '米粒大小，避開眼周', icon: svgIcon('<path d="M9 3H15M10 3V12L4.5 19.5C3.8 20.4 4.5 21 5.5 21H18.5C19.5 21 20.2 20.4 19.5 19.5L14 12V3"/><path d="M6 16H18"/>'), color: '#FFF8F0' },
-  feifei: { name: '膠原淨白煥采精乳（胖粉）', brand: 'ELIXIR 怡麗絲爾', tag: 'new', tagLabel: '新品', tip: '乳液收尾，鎖住精華', icon: svgIcon('<path d="M6 10v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V10"/><path d="M4 6h16v4H4z"/><path d="M8 3h8v3H8z"/>'), color: '#FDF5F8' },
-  loccitane: { name: '蠟菊賦活菁露（歐舒丹）', brand: "L'Occitane 歐舒丹", tag: 'old', tagLabel: '舊品', tip: '精華液，放化妝水後', icon: svgIcon('<path d="M12 22v-7"/><path d="M8 10a4 4 0 0 1 8 0c0 4-4 5-4 5s-4-1-4-5z"/>'), color: '#FEF9EC' },
-  zengpin_gold: { name: '膠原新肌光速精華（贈品金）', brand: 'ELIXIR 怡麗絲爾', tag: 'sample', tagLabel: '小樣', tip: '日間消耗小樣', icon: svgIcon('<path d="M9 2h6"/><path d="M10 2v4"/><path d="M14 2v4"/><path d="M8 6h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Z"/>'), color: '#FFFAEC' },
-  aa: { name: '抗皺精露 AA（大藍）', brand: 'REVITAL 莉薇特麗', tag: 'old', tagLabel: '舊品', tip: '不使用A醇的夜晚使用', icon: svgIcon('<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>'), color: '#EEF0FC' },
-  mask: { name: '黑面膜→清洗', brand: '我的心機茶樹控油調理荳荳黑面膜', tag: 'mask', tagLabel: '面膜(非必選)', tip: '10–15 分鐘', icon: svgIcon('<rect width="18" height="18" x="3" y="3" rx="4"/><path d="M8 10h.01M16 10h.01M12 16c-1.5 0-3-1-3-2h6c0 1-1.5 2-3 2z"/>', true), color: '#F5F5F5', isMask: true, isOptional: true },
-  zengpin_blue: { name: '御光奇肌精華（贈品藍）', brand: 'REVITAL 莉薇特麗', tag: 'sample', tagLabel: '小樣', tip: '如敷完濕潤，則不須擦', icon: svgIcon('<path d="M12 22a4 4 0 0 0 4-4V8l-4-4-4 4v10a4 4 0 0 0 4 4z"/><path d="M12 14v4"/>'), color: '#F4F0FC' }
+const P={
+  dafen:{name:'淨白煥采精露（大粉）',brand:'ELIXIR 怡麗絲爾',tag:'new',tagLabel:'新品',tip:'第一步化妝水，拍打至吸收',icon:svgIcon('<path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/>'),color:'#FBF0F5'},
+  haku:{name:'驅黑淨白露 IV（HAKU）',brand:'HAKU 資生堂',tag:'new',tagLabel:'新品',tip:'美白精華，輕拍全臉，重點顴骨',icon:svgIcon('<path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/>'),color:'#F0F4FB'},
+  meijiru:{name:'多效美肌乳（美肌乳）',brand:'ELIXIR 怡麗絲爾',tag:'opt',tagLabel:'新品（可選）',tip:'乳液，由內向外推開',icon:svgIcon('<path d="M8 10v10a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V10"/><path d="M12 10V6"/><path d="M10 6h4"/><path d="M12 2v4"/>'),color:'#FAF4EC'},
+  dakin:{name:'A醇超能撫紋精華（大金條）',brand:'ELIXIR 怡麗絲爾',tag:'warn',tagLabel:'⚠️ 夜間限定',tip:'米粒大小，避開眼周',icon:svgIcon('<path d="M9 3H15M10 3V12L4.5 19.5C3.8 20.4 4.5 21 5.5 21H18.5C19.5 21 20.2 20.4 19.5 19.5L14 12V3"/><path d="M6 16H18"/>'),color:'#FFF8F0'},
+  feifei:{name:'膠原淨白煥采精乳（胖粉）',brand:'ELIXIR 怡麗絲爾',tag:'new',tagLabel:'新品',tip:'乳液收尾，鎖住精華',icon:svgIcon('<path d="M6 10v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V10"/><path d="M4 6h16v4H4z"/><path d="M8 3h8v3H8z"/>'),color:'#FDF5F8'},
+  loccitane:{name:'蠟菊賦活菁露（歐舒丹）',brand:"L'Occitane 歐舒丹",tag:'old',tagLabel:'舊品',tip:'精華液，放化妝水後',icon:svgIcon('<path d="M12 22v-7"/><path d="M8 10a4 4 0 0 1 8 0c0 4-4 5-4 5s-4-1-4-5z"/>'),color:'#FEF9EC'},
+  zengpin_gold:{name:'膠原新肌光速精華（贈品金）',brand:'ELIXIR 怡麗絲爾',tag:'sample',tagLabel:'小樣',tip:'日間消耗小樣',icon:svgIcon('<path d="M9 2h6"/><path d="M10 2v4"/><path d="M14 2v4"/><path d="M8 6h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Z"/>'),color:'#FFFAEC'},
+  aa:{name:'抗皺精露 AA（大藍）',brand:'REVITAL 莉薇特麗',tag:'old',tagLabel:'舊品',tip:'不使用A醇的夜晚使用',icon:svgIcon('<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>'),color:'#EEF0FC'},
+  mask:{name:'黑面膜→清洗',brand:'面膜步驟',tag:'mask',tagLabel:'面膜(非必選)',tip:'10–15 分鐘',icon:svgIcon('<rect width="18" height="18" x="3" y="3" rx="4"/><path d="M8 10h.01M16 10h.01M12 16c-1.5 0-3-1-3-2h6c0 1-1.5 2-3 2z"/>',true),color:'#F5F5F5',isMask:true,isOptional:true},
+  zengpin_blue:{name:'御光奇肌精華（贈品藍）',brand:'REVITAL 莉薇特麗',tag:'sample',tagLabel:'小樣',tip:'如敷完濕潤，則不須擦',icon:svgIcon('<path d="M12 22a4 4 0 0 0 4-4V8l-4-4-4 4v10a4 4 0 0 0 4 4z"/><path d="M12 14v4"/>'),color:'#F4F0FC'}
 };
 
-const WEEK = [
-  { day:0, mode:'day', steps:['dafen','haku','meijiru'] }, { day:0, mode:'night', steps:['dafen', 'dakin', 'feifei'] },
-  { day:1, mode:'day', steps:['loccitane','zengpin_gold','meijiru'] }, { day:1, mode:'night', steps:['loccitane','aa','feifei'] },
-  { day:2, mode:'day', steps:['dafen','haku','meijiru'] }, { day:2, mode:'night', steps:['dafen', 'mask', 'zengpin_blue', 'feifei'] },
-  { day:3, mode:'day', steps:['dafen','haku','meijiru'] }, { day:3, mode:'night', steps:['dafen', 'dakin', 'feifei'] },
-  { day:4, mode:'day', steps:['loccitane','zengpin_gold','meijiru'] }, { day:4, mode:'night', steps:['loccitane','aa','feifei'] },
-  { day:5, mode:'day', steps:['dafen','haku','meijiru'] }, { day:5, mode:'night', steps:['dafen', 'mask', 'zengpin_blue', 'feifei'] },
-  { day:6, mode:'day', steps:['dafen','meijiru'] }, { day:6, mode:'night', steps:['loccitane','feifei'] }
+const WEEK=[
+  {day:0,mode:'day',steps:['dafen','haku','meijiru']},{day:0,mode:'night',steps:['dafen','dakin','feifei']},
+  {day:1,mode:'day',steps:['loccitane','zengpin_gold','meijiru']},{day:1,mode:'night',steps:['loccitane','aa','feifei']},
+  {day:2,mode:'day',steps:['dafen','haku','meijiru']},{day:2,mode:'night',steps:['dafen','mask','zengpin_blue','feifei']},
+  {day:3,mode:'day',steps:['dafen','haku','meijiru']},{day:3,mode:'night',steps:['dafen','dakin','feifei']},
+  {day:4,mode:'day',steps:['loccitane','zengpin_gold','meijiru']},{day:4,mode:'night',steps:['loccitane','aa','feifei']},
+  {day:5,mode:'day',steps:['dafen','haku','meijiru']},{day:5,mode:'night',steps:['dafen','mask','zengpin_blue','feifei']},
+  {day:6,mode:'day',steps:['dafen','meijiru']},{day:6,mode:'night',steps:['loccitane','feifei']}
 ];
 
-let currentDay = 0, currentMode = 'day', progress = {}, weekDates = [];
+// ══════════════════════════════════════════
+// PERSISTENCE (localStorage)
+// ══════════════════════════════════════════
+const STORAGE_KEY = 'skincare_v2';
 
-function stateKey(d, m) { return d + '_' + m; }
-function getRoutine(d, m) { return m === 'makeup' ? { steps: ['dafen','haku','meijiru'] } : (WEEK.find(w => w.day === d && w.mode === m) || WEEK[0]); }
-function getDone(d, m) { const k = stateKey(d, m); if (!progress[k]) progress[k] = new Set(); return progress[k]; }
-
-function initDayScroll() {
-  if (weekDates.length === 0) {
-    const now = new Date(), jsDay = now.getDay(), todayIdx = jsDay === 0 ? 6 : jsDay - 1;
-    for (let i = 0; i < 7; i++) {
-      const d = new Date(now); d.setDate(now.getDate() + (i - todayIdx));
-      weekDates.push(d);
+function loadData() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return {};
+    const d = JSON.parse(raw);
+    // Convert arrays back to Sets for progress
+    if (d.progress) {
+      Object.keys(d.progress).forEach(k => {
+        d.progress[k] = new Set(d.progress[k]);
+      });
     }
+    return d;
+  } catch(e) { return {}; }
+}
+
+function saveData() {
+  try {
+    const toSave = {
+      progress: {},
+      calEntries: calEntries,
+      weekDatesBase: weekDatesBase
+    };
+    // Convert Sets to arrays
+    Object.keys(progress).forEach(k => {
+      toSave.progress[k] = [...progress[k]];
+    });
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
+  } catch(e) {}
+}
+
+// ══════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════
+let currentDay = 0, currentMode = 'day';
+let progress = {};   // weekday key → Set of done indices
+let calEntries = {}; // 'YYYY-MM-DD' → { dayDone:[], nightDone:[], mood, note }
+let weekDatesBase = null; // ISO string of Monday of current week
+
+let weekDates = [];
+let calYear, calMonth;
+let modalDateKey = null;
+let currentScreen = 'routine';
+
+// Load persisted data
+const saved = loadData();
+if (saved.progress) progress = saved.progress;
+if (saved.calEntries) calEntries = saved.calEntries;
+if (saved.weekDatesBase) weekDatesBase = saved.weekDatesBase;
+
+// ══════════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════════
+function dateKey(d) {
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+function stateKey(d,m){return d+'_'+m}
+function getRoutine(d,m){return m==='makeup'?{steps:['dafen','haku','meijiru']}:(WEEK.find(w=>w.day===d&&w.mode===m)||WEEK[0])}
+function getDone(d,m){const k=stateKey(d,m);if(!progress[k])progress[k]=new Set();return progress[k]}
+
+function initWeekDates() {
+  const now = new Date();
+  const jsDay = now.getDay(), todayIdx = jsDay === 0 ? 6 : jsDay - 1;
+  // If we have a saved base and it's this week, use it; else compute fresh
+  let monday;
+  if (weekDatesBase) {
+    monday = new Date(weekDatesBase);
+    // Check if today is within this week range
+    const mondayTime = monday.getTime();
+    const todayTime = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+    const daysDiff = Math.floor((todayTime - mondayTime) / 86400000);
+    if (daysDiff < 0 || daysDiff > 6) {
+      // New week — reset to current
+      monday = new Date(now);
+      monday.setDate(now.getDate() - todayIdx);
+      monday.setHours(0,0,0,0);
+      weekDatesBase = dateKey(monday);
+    }
+  } else {
+    monday = new Date(now);
+    monday.setDate(now.getDate() - todayIdx);
+    monday.setHours(0,0,0,0);
+    weekDatesBase = dateKey(monday);
   }
+  weekDates = [];
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(monday);
+    d.setDate(monday.getDate() + i);
+    weekDates.push(d);
+  }
+}
+
+// ══════════════════════════════════════════
+// SCREEN NAVIGATION
+// ══════════════════════════════════════════
+function goScreen(name) {
+  currentScreen = name;
+  document.getElementById('screenRoutine').classList.toggle('visible', name==='routine');
+  document.getElementById('screenCalendar').classList.toggle('visible', name==='calendar');
+  document.getElementById('screenStats').classList.toggle('visible', name==='stats');
+  ['navRoutine','navCalendar','navStats'].forEach(id => document.getElementById(id).classList.remove('active'));
+  document.getElementById('nav'+name.charAt(0).toUpperCase()+name.slice(1)).classList.add('active');
+  if (name === 'calendar') renderCalendar();
+  if (name === 'stats') renderStats();
+}
+
+// ══════════════════════════════════════════
+// ROUTINE SCREEN
+// ══════════════════════════════════════════
+function initDayScroll() {
   const strip = document.getElementById('dayScroll'); strip.innerHTML = '';
-  ['一','二','三','四','五','六','日'].forEach((label, i) => {
+  ['一','二','三','四','五','六','日'].forEach((label,i) => {
     const btn = document.createElement('button');
-    btn.className = 'day-chip' + (i === currentDay ? ' active' : '');
+    btn.className = 'day-chip' + (i===currentDay?' active':'');
     btn.id = 'daychip_' + i;
     btn.innerHTML = `<span class="day-label">${label}</span><span class="day-num">${weekDates[i].getMonth()+1}/${weekDates[i].getDate()}</span><span class="done-dot"></span>`;
-    btn.onclick = () => { currentDay = i; render(); };
+    btn.onclick = () => { currentDay = i; renderRoutine(); };
     strip.appendChild(btn);
   });
 }
 
 function updateDayScroll() {
-  for(let i=0; i<7; i++){
-    const chip = document.getElementById('daychip_' + i); if (!chip) continue;
-    chip.className = 'day-chip' + (i === currentDay ? ' active' : '') + (getDone(i,'day').size>0 || getDone(i,'night').size>0 || getDone(i,'makeup').size>0 ? ' has-done' : '') + (currentMode === 'night' ? ' day-chip-night' : '');
+  for(let i=0;i<7;i++){
+    const chip=document.getElementById('daychip_'+i); if(!chip)continue;
+    chip.className='day-chip'+(i===currentDay?' active':'')+(getDone(i,'day').size>0||getDone(i,'night').size>0||getDone(i,'makeup').size>0?' has-done':'')+(currentMode==='night'?' day-chip-night':'');
   }
 }
 
-function setMode(m) { currentMode = m; render(); }
+function setMode(m){currentMode=m;renderRoutine()}
 
-function render() {
+function renderRoutine() {
   const isNight = currentMode === 'night';
-  document.getElementById('app').className = 'app' + (isNight ? ' night-mode-bg' : '');
-  document.getElementById('header').className = 'header' + (isNight ? ' night-header' : '');
-  document.getElementById('modeBar').className = 'mode-bar' + (isNight ? ' night-mode-bar' : '');
-  document.getElementById('progressSection').className = 'progress-section' + (isNight ? ' night-progress' : '');
-  document.getElementById('divider').className = 'divider' + (isNight ? ' night-divider' : '');
-  document.getElementById('appTitle').className = 'app-title' + (isNight ? ' app-title-night' : '');
-  document.getElementById('todayDate').className = 'today-date' + (isNight ? ' today-date-night' : '');
+  document.getElementById('app').className = 'app'+(isNight?' night-mode-bg':'');
+  document.getElementById('header').className = 'header'+(isNight?' night-header':'');
+  document.getElementById('modeBar').className = 'mode-bar'+(isNight?' night-mode-bar':'');
+  document.getElementById('progressSection').className = 'progress-section'+(isNight?' night-progress':'');
+  document.getElementById('divider').className = 'divider'+(isNight?' night-divider':'');
+  document.getElementById('appTitle').className = 'app-title'+(isNight?' app-title-night':'');
+  document.getElementById('todayDate').className = 'today-date'+(isNight?' today-date-night':'');
+  document.getElementById('stepList').className = 'step-list'+(isNight?' night-step-list':'');
+  document.getElementById('bottomNav').className = 'bottom-nav'+(isNight?' night-nav':'');
 
-  ['tabDay','tabNight','tabMakeup'].forEach(id => document.getElementById(id).classList.remove('active','night-active'));
-  document.getElementById(currentMode === 'day' ? 'tabDay' : (currentMode === 'night' ? 'tabNight' : 'tabMakeup')).classList.add(isNight ? 'night-active' : 'active');
+  ['tabDay','tabNight','tabMakeup'].forEach(id=>document.getElementById(id).classList.remove('active','night-active'));
+  document.getElementById(currentMode==='day'?'tabDay':currentMode==='night'?'tabNight':'tabMakeup').classList.add(isNight?'night-active':'active');
 
   updateDayScroll();
-  const routine = getRoutine(currentDay, currentMode), done = getDone(currentDay, currentMode);
-  const trackableIndices = routine.steps.map((p, i) => P[p].isOptional ? -1 : i).filter(i => i !== -1);
-  const doneCount = trackableIndices.filter(i => done.has(i)).length;
+  const routine=getRoutine(currentDay,currentMode), done=getDone(currentDay,currentMode);
+  const trackable=routine.steps.map((p,i)=>P[p].isOptional?-1:i).filter(i=>i!==-1);
+  const doneCount=trackable.filter(i=>done.has(i)).length;
 
-  document.getElementById('progressCount').textContent = `${doneCount} / ${trackableIndices.length}`;
-  document.getElementById('progressFill').style.width = (trackableIndices.length ? (doneCount/trackableIndices.length*100) : 0) + '%';
-  document.getElementById('progressLabel').textContent = `${['週一','週二','週三','週四','週五','週六','週日'][currentDay]} ${currentMode==='day'?'日間':currentMode==='night'?'夜間':'化妝日'}`;
+  document.getElementById('progressCount').textContent=`${doneCount}/${trackable.length}`;
+  document.getElementById('progressFill').style.width=(trackable.length?(doneCount/trackable.length*100):0)+'%';
+  document.getElementById('progressLabel').textContent=['週一','週二','週三','週四','週五','週六','週日'][currentDay]+' '+(currentMode==='day'?'日間':currentMode==='night'?'夜間':'化妝日');
 
-  const list = document.getElementById('stepList'); list.innerHTML = '';
-  
-  // Reminder Block - 修正：更換文字內容，移除強標籤
-  const reminder = document.createElement('div');
-  reminder.className = `reminder-box ${isNight ? 'night-reminder' : ''}`;
-  reminder.innerHTML = `「小金條」只用在痘痘，大粉、歐舒丹 或 面膜 後使用。`;
-  list.appendChild(reminder);
+  const list=document.getElementById('stepList'); list.innerHTML='';
 
-  routine.steps.forEach((pid, i) => {
-    const p = P[pid], isDone = done.has(i), isNext = i === trackableIndices.find(idx => !done.has(idx));
-    const card = document.createElement('div');
-    card.className = `step-card ${isNight?'night-card':''} ${isDone?'is-done':''} ${isNext?'is-next':''}`;
-    card.onclick = () => { if (isDone) done.delete(i); else done.add(i); render(); };
-    card.innerHTML = `<div class="prod-icon" style="background:${p.isMask?'#1A1A1A':p.color}">${p.icon}</div>
-      <div class="step-body"><div class="step-top-row"><span class="step-num">${i+1}</span><span class="step-badge badge-${p.tag}">${p.tagLabel}</span></div><div class="step-name">${p.name}</div><div class="step-brand">${p.brand}</div><div class="step-tip">${p.tip}</div></div>
+  // Reminder
+  const rem=document.createElement('div');
+  rem.className='reminder-box'+(isNight?' night-reminder':'');
+  rem.innerHTML='「小金條」只用在痘痘，大粉、歐舒丹 或 面膜 後使用。';
+  list.appendChild(rem);
+
+  routine.steps.forEach((pid,i)=>{
+    const p=P[pid],isDone=done.has(i),isNext=i===trackable.find(idx=>!done.has(idx));
+    const card=document.createElement('div');
+    card.className=`step-card ${isNight?'night-card':''} ${isDone?'is-done':''} ${isNext?'is-next':''}`;
+    card.onclick=()=>{
+      if(isDone) done.delete(i); else done.add(i);
+      // Auto-sync to calEntry for today
+      syncTodayToCalendar();
+      saveData();
+      renderRoutine();
+    };
+    card.innerHTML=`<div class="prod-icon" style="background:${p.isMask?'#1A1A1A':p.color}">${p.icon}</div>
+      <div class="step-body"><div class="step-top-row"><span class="step-num">${i+1}</span><span class="step-badge badge-${p.tag}">${p.tagLabel}</span></div>
+      <div class="step-name">${p.name}</div><div class="step-brand">${p.brand}</div><div class="step-tip">${p.tip}</div></div>
       <div class="check-circle">${isDone?'<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7L5.5 10L11.5 4" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>':''}</div>`;
     list.appendChild(card);
   });
 
-  // 重置按鈕
-  const resetBtn = document.createElement('button');
-  resetBtn.className = 'reset-btn' + (isNight ? ' night-reset' : '');
-  resetBtn.textContent = '重置本次進度';
-  resetBtn.onclick = (e) => { e.stopPropagation(); progress[stateKey(currentDay, currentMode)] = new Set(); render(); };
-  list.appendChild(resetBtn);
+  // Done banner
+  if(doneCount===trackable.length&&trackable.length>0){
+    const b=document.createElement('div');
+    b.className='done-banner'+(isNight?' night-done':'');
+    b.innerHTML=`<div class="done-title">${isNight?'晚安':'完成了'}</div><div style="font-size:12px;color:var(${isNight?'--lavender':'--ink-light'});font-weight:300;margin-top:2px">前往月曆可記錄今日感受</div>`;
+    list.appendChild(b);
+  }
 
-  // 完成當日進度按鈕 (僅夜間模式)
-  if (isNight) {
-    const completeBtn = document.createElement('button');
-    completeBtn.className = 'reset-btn complete-btn';
-    completeBtn.textContent = '完成當日進度';
-    completeBtn.onclick = (e) => {
-      e.stopPropagation(); weekDates[currentDay].setDate(weekDates[currentDay].getDate() + 7);
-      ['day','night','makeup'].forEach(m => progress[stateKey(currentDay, m)] = new Set());
-      initDayScroll(); render();
-    };
-    list.appendChild(completeBtn);
+  const rb=document.createElement('button');
+  rb.className='reset-btn'+(isNight?' night-reset':'');
+  rb.textContent='重置本次進度';
+  rb.onclick=(e)=>{e.stopPropagation();progress[stateKey(currentDay,currentMode)]=new Set();saveData();renderRoutine()};
+  list.appendChild(rb);
+}
+
+// Sync today's routine done state to calEntry
+function syncTodayToCalendar() {
+  const todayDate = weekDates[currentDay];
+  if (!todayDate) return;
+  const dk = dateKey(todayDate);
+  if (!calEntries[dk]) calEntries[dk] = { dayDone:[], nightDone:[], mood:'', note:'' };
+  const dayDone = getDone(currentDay, 'day');
+  const nightDone = getDone(currentDay, 'night');
+  const dayRoutine = getRoutine(currentDay, 'day');
+  const nightRoutine = getRoutine(currentDay, 'night');
+  calEntries[dk].dayDone = dayRoutine.steps.filter((_,i) => dayDone.has(i));
+  calEntries[dk].nightDone = nightRoutine.steps.filter((_,i) => nightDone.has(i));
+}
+
+// ══════════════════════════════════════════
+// CALENDAR SCREEN
+// ══════════════════════════════════════════
+function renderCalendar() {
+  const now = new Date();
+  if (calYear === undefined) { calYear = now.getFullYear(); calMonth = now.getMonth(); }
+  document.getElementById('calTitle').textContent = `${calYear} 年 ${calMonth+1} 月`;
+  const grid = document.getElementById('calGrid'); grid.innerHTML = '';
+
+  const firstDay = new Date(calYear, calMonth, 1);
+  const totalDays = new Date(calYear, calMonth+1, 0).getDate();
+  // Mon=0 offset
+  let startOffset = firstDay.getDay() - 1;
+  if (startOffset < 0) startOffset = 6;
+
+  for (let i = 0; i < startOffset; i++) {
+    const empty = document.createElement('div');
+    empty.className = 'cal-cell empty';
+    grid.appendChild(empty);
+  }
+
+  for (let d = 1; d <= totalDays; d++) {
+    const cellDate = new Date(calYear, calMonth, d);
+    const dk = dateKey(cellDate);
+    const entry = calEntries[dk] || {};
+    const isFuture = cellDate > now && dateKey(cellDate) !== dateKey(now);
+    const isToday = dateKey(cellDate) === dateKey(now);
+
+    const cell = document.createElement('div');
+    cell.className = 'cal-cell' + (isToday?' today':'') + (isFuture?' future':'');
+
+    const dateDiv = document.createElement('div');
+    dateDiv.className = 'cal-date';
+    dateDiv.textContent = d;
+    cell.appendChild(dateDiv);
+
+    // Dots
+    const dots = document.createElement('div');
+    dots.className = 'cal-dots';
+    if (entry.dayDone && entry.dayDone.length > 0) {
+      const dot = document.createElement('div'); dot.className='cal-dot dot-day'; dots.appendChild(dot);
+    }
+    if (entry.nightDone && entry.nightDone.length > 0) {
+      const dot = document.createElement('div'); dot.className='cal-dot dot-night'; dots.appendChild(dot);
+    }
+    if (entry.note && entry.note.trim()) {
+      const dot = document.createElement('div'); dot.className='cal-dot dot-note'; dots.appendChild(dot);
+    }
+    cell.appendChild(dots);
+
+    if (!isFuture) {
+      cell.onclick = () => openModal(dk, cellDate);
+    }
+    grid.appendChild(cell);
   }
 }
 
+function calPrevMonth() { calMonth--; if(calMonth<0){calMonth=11;calYear--}; renderCalendar(); }
+function calNextMonth() {
+  const now=new Date();
+  if(calYear===now.getFullYear()&&calMonth===now.getMonth()) return;
+  calMonth++; if(calMonth>11){calMonth=0;calYear++}; renderCalendar();
+}
+
+// ── Modal ──
+function openModal(dk, dateObj) {
+  modalDateKey = dk;
+  const entry = calEntries[dk] || {};
+  const days=['週日','週一','週二','週三','週四','週五','週六'];
+  document.getElementById('modalDateTitle').textContent =
+    `${dateObj.getMonth()+1} 月 ${dateObj.getDate()} 日`;
+  document.getElementById('modalSubtitle').textContent =
+    days[dateObj.getDay()] + ' · 點選切換完成狀態';
+
+  // Compute which weekday index this date maps to (Mon=0)
+  const wdIdx = dateObj.getDay() === 0 ? 6 : dateObj.getDay() - 1;
+  const dayRoutine = getRoutine(wdIdx, 'day');
+  const nightRoutine = getRoutine(wdIdx, 'night');
+
+  // Day pills
+  const dayPills = document.getElementById('modalDayPills');
+  dayPills.innerHTML = '<div style="font-size:10px;color:var(--ink-light);margin-bottom:6px">☀️ 日間</div>';
+  const df = document.createElement('div'); df.className='done-pills'; dayPills.appendChild(df);
+  dayRoutine.steps.forEach(pid => {
+    const pill = document.createElement('span');
+    const done = entry.dayDone && entry.dayDone.includes(pid);
+    pill.className = 'done-pill' + (done?' active':'');
+    pill.textContent = P[pid] ? P[pid].name.match(/（(.+)）/)?.[1] || pid : pid;
+    pill.onclick = () => toggleCalPill(dk, wdIdx, 'day', pid, pill);
+    df.appendChild(pill);
+  });
+
+  // Night pills
+  const nightPills = document.getElementById('modalNightPills');
+  nightPills.innerHTML = '<div style="font-size:10px;color:var(--ink-light);margin:10px 0 6px">🌙 夜間</div>';
+  const nf = document.createElement('div'); nf.className='done-pills'; nightPills.appendChild(nf);
+  nightRoutine.steps.forEach(pid => {
+    const pill = document.createElement('span');
+    const done = entry.nightDone && entry.nightDone.includes(pid);
+    pill.className = 'done-pill' + (done?' active':'');
+    pill.textContent = P[pid] ? P[pid].name.match(/（(.+)）/)?.[1] || pid : pid;
+    pill.onclick = () => toggleCalPill(dk, wdIdx, 'night', pid, pill);
+    nf.appendChild(pill);
+  });
+
+  // Mood
+  document.querySelectorAll('.mood-btn').forEach(btn => {
+    btn.classList.toggle('selected', btn.dataset.mood === (entry.mood||''));
+  });
+
+  // Note
+  document.getElementById('noteTextarea').value = entry.note || '';
+
+  document.getElementById('dayModal').classList.add('open');
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function toggleCalPill(dk, wdIdx, mode, pid, pillEl) {
+  if (!calEntries[dk]) calEntries[dk] = { dayDone:[], nightDone:[], mood:'', note:'' };
+  const arr = mode === 'day' ? calEntries[dk].dayDone : calEntries[dk].nightDone;
+  const idx = arr.indexOf(pid);
+  if (idx > -1) { arr.splice(idx,1); pillEl.classList.remove('active'); }
+  else { arr.push(pid); pillEl.classList.add('active'); }
+  saveData();
+  renderCalendar();
+}
+
+function selectMood(m) {
+  document.querySelectorAll('.mood-btn').forEach(btn => btn.classList.toggle('selected', btn.dataset.mood===m));
+}
+
+function saveModalEntry() {
+  if (!modalDateKey) return;
+  if (!calEntries[modalDateKey]) calEntries[modalDateKey] = { dayDone:[], nightDone:[], mood:'', note:'' };
+  const selected = document.querySelector('.mood-btn.selected');
+  calEntries[modalDateKey].mood = selected ? selected.dataset.mood : '';
+  calEntries[modalDateKey].note = document.getElementById('noteTextarea').value.trim();
+  saveData();
+  renderCalendar();
+  closeModal();
+}
+
+function closeModal() {
+  document.getElementById('dayModal').classList.remove('open');
+  document.getElementById('modalOverlay').classList.remove('open');
+  modalDateKey = null;
+}
+
+// ══════════════════════════════════════════
+// STATS SCREEN
+// ══════════════════════════════════════════
+function renderStats() {
+  const now = new Date();
+  const container = document.getElementById('statsContent');
+  container.innerHTML = '';
+
+  // Title
+  const title = document.createElement('div');
+  title.className = 'stats-title';
+  title.textContent = '保養紀錄';
+  container.appendChild(title);
+
+  // Compute streak
+  let streak = 0;
+  const check = new Date(now);
+  while (true) {
+    const dk = dateKey(check);
+    const e = calEntries[dk];
+    if (e && ((e.dayDone&&e.dayDone.length>0)||(e.nightDone&&e.nightDone.length>0))) {
+      streak++;
+      check.setDate(check.getDate()-1);
+    } else break;
+    if (streak > 365) break;
+  }
+
+  // Streak card
+  const sc = document.createElement('div');
+  sc.className = 'stat-card';
+  sc.innerHTML = `<div class="stat-card-title">連續保養天數</div>
+    <div class="streak-num">${streak}</div>
+    <div class="streak-label">天 🌸</div>`;
+  container.appendChild(sc);
+
+  // Monthly summary (last 4 weeks)
+  const mc = document.createElement('div');
+  mc.className = 'stat-card';
+  mc.innerHTML = '<div class="stat-card-title">近 28 天統計</div><div class="month-bar" id="statsBarDay"></div><div class="month-bar" id="statsBarNight"></div>';
+  container.appendChild(mc);
+
+  let dayCount=0, nightCount=0, totalDays=0;
+  const rows = {day:[], night:[]};
+  for (let w=3; w>=0; w--) {
+    let wd=0,wn=0;
+    for (let d=6; d>=0; d--) {
+      const check2 = new Date(now);
+      check2.setDate(now.getDate() - w*7 - d);
+      const dk = dateKey(check2);
+      const e = calEntries[dk]||{};
+      if(e.dayDone&&e.dayDone.length>0) {wd++;dayCount++;}
+      if(e.nightDone&&e.nightDone.length>0) {wn++;nightCount++;}
+      totalDays++;
+    }
+    rows.day.push(wd); rows.night.push(wn);
+  }
+
+  // Render bars
+  setTimeout(() => {
+    const barDay = document.getElementById('statsBarDay');
+    const barNight = document.getElementById('statsBarNight');
+    if (!barDay || !barNight) return;
+    barDay.innerHTML = '<div style="font-size:10px;color:var(--ink-light);margin-bottom:4px">☀️ 日間</div>';
+    barNight.innerHTML = '<div style="font-size:10px;color:var(--ink-light);margin-bottom:4px">🌙 夜間</div>';
+    rows.day.forEach((v,i) => {
+      barDay.innerHTML += `<div class="bar-row"><div class="bar-label">W${i+1}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.round(v/7*100)}%"></div></div><div class="bar-count">${v}</div></div>`;
+    });
+    rows.night.forEach((v,i) => {
+      barNight.innerHTML += `<div class="bar-row"><div class="bar-label">W${i+1}</div><div class="bar-track"><div class="bar-fill night-bar" style="width:${Math.round(v/7*100)}%"></div></div><div class="bar-count">${v}</div></div>`;
+    });
+  }, 0);
+
+  // Totals
+  const tc = document.createElement('div');
+  tc.className = 'stat-card';
+  tc.innerHTML = `<div class="stat-card-title">累計完成</div>
+    <div class="stat-row"><span class="stat-row-label">日間保養次數</span><span class="stat-row-val">${Object.values(calEntries).filter(e=>e.dayDone&&e.dayDone.length>0).length} 次</span></div>
+    <div class="stat-row"><span class="stat-row-label">夜間保養次數</span><span class="stat-row-val">${Object.values(calEntries).filter(e=>e.nightDone&&e.nightDone.length>0).length} 次</span></div>
+    <div class="stat-row"><span class="stat-row-label">筆記數量</span><span class="stat-row-val">${Object.values(calEntries).filter(e=>e.note&&e.note.trim()).length} 則</span></div>`;
+  container.appendChild(tc);
+
+  // Recent notes
+  const noteDays = Object.entries(calEntries)
+    .filter(([,e])=>e.note&&e.note.trim())
+    .sort((a,b)=>b[0].localeCompare(a[0]))
+    .slice(0,5);
+
+  if (noteDays.length > 0) {
+    const nc = document.createElement('div');
+    nc.className = 'stat-card';
+    nc.innerHTML = '<div class="stat-card-title">最近筆記</div><div class="recent-notes">' +
+      noteDays.map(([dk,e]) => {
+        const d = new Date(dk+'T12:00:00');
+        return `<div class="note-entry">
+          <div class="note-entry-date">${d.getMonth()+1}/${d.getDate()} <span class="mood-display">${e.mood||''}</span></div>
+          <div class="note-entry-text">${e.note}</div>
+        </div>`;
+      }).join('') + '</div>';
+    container.appendChild(nc);
+  }
+}
+
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
 const n = new Date(), jd = n.getDay();
 currentDay = jd === 0 ? 6 : jd - 1;
 document.getElementById('todayDate').innerHTML = `${['週日','週一','週二','週三','週四','週五','週六'][jd]}&nbsp;${n.getMonth()+1}/${n.getDate()}`;
-initDayScroll(); render();
+
+initWeekDates();
+initDayScroll();
+renderRoutine();
 </script>
 </body>
 </html>
