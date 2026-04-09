@@ -59,7 +59,7 @@
 
   /* Header */
   .header {
-    padding: calc(var(--safe-top) + 14px) 20px 0;
+    padding: calc(var(--safe-top) + 14px) 16px 0;
     background: var(--warm-white);
     flex-shrink: 0;
   }
@@ -69,6 +69,7 @@
     align-items: center;
     justify-content: space-between;
     margin-bottom: 16px;
+    padding: 0 4px;
   }
 
   .app-title {
@@ -90,26 +91,24 @@
   /* Day selector */
   .day-scroll {
     display: flex;
-    gap: 8px;
-    overflow-x: auto;
+    justify-content: center;
+    gap: 4px;
     padding-bottom: 14px;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+    width: 100%;
   }
-  .day-scroll::-webkit-scrollbar { display: none; }
 
   .day-chip {
-    flex-shrink: 0;
+    flex: 1;
+    max-width: 52px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 7px 10px 8px;
-    border-radius: 16px;
+    padding: 6px 0 7px;
+    border-radius: 12px;
     border: 1px solid var(--blush);
     background: transparent;
     cursor: pointer;
     transition: all .2s;
-    min-width: 48px;
   }
   .day-chip.active {
     background: var(--rose-deep);
@@ -119,34 +118,32 @@
     border-color: var(--sage);
   }
   .day-chip .day-label {
-    font-size: 10px;
+    font-size: 9px;
     color: var(--ink-light);
     font-weight: 400;
-    letter-spacing: .03em;
+    margin-bottom: 1px;
   }
   .day-chip.active .day-label { color: rgba(255,255,255,.75); }
   .day-chip .day-num {
     font-family: 'DM Serif Display', serif;
-    font-size: 18px;
+    font-size: 13px;
     color: var(--ink);
     line-height: 1.1;
-    margin-top: 2px;
   }
   .day-chip.active .day-num { color: #fff; }
   .day-chip.has-done .day-num { color: var(--sage); }
   .day-chip.has-done.active .day-num { color: #fff; }
 
   .done-dot {
-    width: 5px; height: 5px; border-radius: 50%;
+    width: 3px; height: 3px; border-radius: 50%;
     background: var(--sage);
     margin-top: 3px;
     opacity: 0;
-    transition: opacity .2s;
   }
   .day-chip.has-done .done-dot { opacity: 1; }
   .day-chip.active .done-dot { background: rgba(255,255,255,.6); }
 
-  /* Mode tabs */
+  /* Mode tabs - 修改重點：文字顏色配合主題 */
   .mode-bar {
     display: flex;
     padding: 0 20px 12px;
@@ -163,21 +160,25 @@
     background: transparent;
     font-family: 'Noto Serif TC', serif;
     font-size: 12px;
-    color: var(--ink-mid);
+    color: var(--ink-mid); /* 預設顏色 */
     cursor: pointer;
     transition: all .2s;
     text-align: center;
     font-weight: 400;
   }
+  
+  /* 日間/化妝日 啟用時 */
   .mode-tab.active {
     background: var(--rose-deep);
     border-color: var(--rose-deep);
-    color: #fff;
+    color: #ffffff; /* 配合日間深玫瑰色背景使用白色文字 */
   }
+
+  /* 夜間 啟用時 */
   .mode-tab.night-active {
     background: var(--lavender-deep);
     border-color: var(--lavender-deep);
-    color: #fff;
+    color: #ffffff; /* 配合夜間深紫色背景使用白色文字 */
   }
 
   /* Progress */
@@ -233,228 +234,78 @@
   }
   .step-list::-webkit-scrollbar { display: none; }
 
-  /* Section note */
-  .section-note {
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-    padding: 10px 14px;
-    border-radius: 10px;
-    margin-bottom: 14px;
-    font-size: 12px;
-    line-height: 1.6;
-    font-weight: 300;
-  }
-  .note-day {
-    background: var(--amber-soft);
-    color: var(--ink-mid);
-    border-left: 3px solid var(--gold);
-  }
-  .note-night {
-    background: #2A2540;
-    color: #C8BEE8;
-    border-left: 3px solid var(--lavender-deep);
-  }
-  .note-warn {
-    background: #FFF0EE;
-    color: #7A3830;
-    border-left: 3px solid #C96058;
-  }
-
-  /* Step card */
+  /* Step Card styles */
   .step-card {
-    display: flex;
-    gap: 14px;
-    align-items: flex-start;
-    padding: 14px;
-    border-radius: 14px;
-    border: 1px solid var(--blush);
-    background: var(--warm-white);
-    margin-bottom: 10px;
-    cursor: pointer;
-    transition: all .2s;
-    position: relative;
-    overflow: hidden;
+    display: flex; gap: 14px; align-items: flex-start; padding: 14px; border-radius: 14px;
+    border: 1px solid var(--blush); background: var(--warm-white); margin-bottom: 10px; cursor: pointer; transition: all .2s;
+    position: relative; overflow: hidden;
   }
-  .step-card::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 3px;
-    border-radius: 3px 0 0 3px;
-    background: var(--blush);
-    transition: background .2s;
-  }
+  .step-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; border-radius: 3px 0 0 3px; background: var(--blush); transition: background .2s; }
   .step-card.is-next::before { background: var(--rose); }
   .step-card.is-done::before { background: var(--sage); }
   .step-card.is-done { background: var(--parchment); border-color: var(--blush); opacity: .65; }
   .step-card.is-next { border-color: var(--rose-muted); background: #FEF8F5; }
 
-  .step-card.night-card {
-    border-color: var(--night-border);
-    background: var(--night-card);
-  }
+  .step-card.night-card { border-color: var(--night-border); background: var(--night-card); }
   .step-card.night-card::before { background: var(--night-border); }
   .step-card.night-card.is-next { border-color: #7060B8; background: #2F2A48; }
   .step-card.night-card.is-next::before { background: var(--lavender-deep); }
   .step-card.night-card.is-done { background: #221F35; opacity: .55; }
 
-  /* Product icon */
-  .prod-icon {
-    width: 56px; height: 56px;
-    border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-    position: relative;
-  }
-
+  .prod-icon { width: 56px; height: 56px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; position: relative; }
   .step-body { flex: 1; min-width: 0; }
-
-  .step-top-row {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-bottom: 4px;
-  }
-
-  .step-num {
-    font-size: 10px;
-    font-weight: 500;
-    width: 18px; height: 18px;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    background: var(--parchment);
-    color: var(--ink-mid);
-    flex-shrink: 0;
-  }
+  .step-top-row { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+  .step-num { font-size: 10px; font-weight: 500; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--parchment); color: var(--ink-mid); flex-shrink: 0; }
   .is-next .step-num { background: var(--rose-deep); color: #fff; }
   .night-card .step-num { background: var(--night-border); color: #C8BEE8; }
   .night-card.is-next .step-num { background: var(--lavender-deep); color: #fff; }
 
-  .step-badge {
-    font-size: 9px;
-    font-weight: 500;
-    padding: 2px 7px;
-    border-radius: 8px;
-    letter-spacing: .03em;
-  }
-  .badge-new   { background: #D4E0D2; color: #2A4F28; }
-  .badge-old   { background: var(--lavender); color: #3D2F7A; }
-  .badge-sample{ background: var(--gold-light); color: #5A3E00; }
-  .badge-warn  { background: #FDDDD9; color: #7A2820; }
-  .badge-opt   { background: var(--parchment); color: var(--ink-mid); }
-  .badge-mask  { background: #F0EAD6; color: #5A4020; font-weight: 700; }
+  .step-badge { font-size: 9px; font-weight: 500; padding: 2px 7px; border-radius: 8px; letter-spacing: .03em; }
+  .badge-new { background: #D4E0D2; color: #2A4F28; }
+  .badge-old { background: var(--lavender); color: #3D2F7A; }
+  .badge-sample { background: var(--gold-light); color: #5A3E00; }
+  .badge-warn { background: #FDDDD9; color: #7A2820; }
+  .badge-opt { background: var(--parchment); color: var(--ink-mid); }
+  .badge-mask { background: #F0EAD6; color: #5A4020; font-weight: 700; }
 
-  .step-name {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--ink);
-    line-height: 1.35;
-    margin-bottom: 2px;
-  }
+  .step-name { font-size: 14px; font-weight: 500; color: var(--ink); line-height: 1.35; margin-bottom: 2px; }
   .night-card .step-name { color: #E8E0F5; }
   .is-done .step-name { text-decoration: line-through; }
-
-  .step-brand {
-    font-size: 10px;
-    color: var(--ink-light);
-    letter-spacing: .04em;
-    margin-bottom: 5px;
-    font-weight: 300;
-  }
+  .step-brand { font-size: 10px; color: var(--ink-light); letter-spacing: .04em; margin-bottom: 5px; font-weight: 300; }
   .night-card .step-brand { color: #7A6EA8; }
-
-  .step-tip {
-    font-size: 11.5px;
-    color: var(--ink-light);
-    line-height: 1.55;
-    font-weight: 300;
-  }
+  .step-tip { font-size: 11.5px; color: var(--ink-light); line-height: 1.55; font-weight: 300; }
   .night-card .step-tip { color: #8A7EAA; }
 
-  /* Check circle */
-  .check-wrap {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    margin-top: 4px;
-  }
-  .check-circle {
-    width: 26px; height: 26px;
-    border-radius: 50%;
-    border: 1.5px solid var(--blush);
-    display: flex; align-items: center; justify-content: center;
-    transition: all .2s;
-  }
-  .is-done .check-circle {
-    background: var(--sage);
-    border-color: var(--sage);
-  }
+  .check-circle { width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--blush); display: flex; align-items: center; justify-content: center; transition: all .2s; }
+  .is-done .check-circle { background: var(--sage); border-color: var(--sage); }
   .night-card .check-circle { border-color: var(--night-border); }
   .night-card.is-done .check-circle { background: var(--lavender-deep); border-color: var(--lavender-deep); }
 
-  /* Done banner */
-  .done-banner {
-    padding: 24px 20px;
-    text-align: center;
-    border-radius: 14px;
-    background: var(--sage-light);
-    border: 1px solid var(--sage);
-    margin-top: 4px;
-  }
-  .done-banner .done-icon { color: var(--rose-deep); margin-bottom: 8px; display: flex; justify-content: center; align-items: center; }
+  .done-banner { padding: 24px 20px; text-align: center; border-radius: 14px; background: var(--sage-light); border: 1px solid var(--sage); margin-top: 4px; }
   .done-banner .done-title { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--rose-deep); margin-bottom: 4px; }
-  .done-banner .done-sub { font-size: 12px; color: var(--ink-light); font-weight: 300; }
-
-  .done-banner.night-done {
-    background: #2A2540;
-    border-color: var(--lavender-deep);
-  }
-  .done-banner.night-done .done-icon { color: #C8BEE8; }
+  .done-banner.night-done { background: #2A2540; border-color: var(--lavender-deep); }
   .done-banner.night-done .done-title { color: #C8BEE8; }
-  .done-banner.night-done .done-sub { color: #7A6EA8; }
 
-  /* Buttons */
-  .reset-btn {
-    width: 100%;
-    padding: 11px;
-    border-radius: 10px;
-    border: 1px solid var(--blush);
-    background: transparent;
-    font-family: 'Noto Serif TC', serif;
-    font-size: 12px;
-    color: var(--ink-light);
-    cursor: pointer;
-    margin-top: 12px;
-    transition: all .2s;
-    letter-spacing: .04em;
-  }
-  .reset-btn:active { background: var(--parchment); }
-  
-  .complete-btn {
-    background: var(--lavender-deep) !important;
-    color: #fff !important;
-    border-color: var(--lavender-deep) !important;
-    margin-top: 8px;
-    font-weight: 500;
-  }
-  .complete-btn:active { opacity: 0.8; }
+  .section-note { display: flex; align-items: flex-start; gap: 8px; padding: 10px 14px; border-radius: 10px; margin-bottom: 14px; font-size: 12px; line-height: 1.6; font-weight: 300; }
+  .note-day { background: var(--amber-soft); color: var(--ink-mid); border-left: 3px solid var(--gold); }
+  .note-night { background: #2A2540; color: #C8BEE8; border-left: 3px solid var(--lavender-deep); }
 
-  /* Night mode colors */
+  .reset-btn { width: 100%; padding: 11px; border-radius: 10px; border: 1px solid var(--blush); background: transparent; font-family: 'Noto Serif TC', serif; font-size: 12px; color: var(--ink-light); cursor: pointer; margin-top: 12px; transition: all .2s; letter-spacing: .04em; }
+  .complete-btn { background: var(--lavender-deep) !important; color: #fff !important; border-color: var(--lavender-deep) !important; margin-top: 8px; font-weight: 500; }
+
+  /* Night mode specific */
   .night-mode-bg { background: var(--night-bg) !important; }
   .night-header { background: var(--night-bg) !important; }
-  .night-mode-bar { background: var(--night-bg) !important; }
   
-  /* Update Night Mode Tab Colors */
+  .night-mode-bar { background: var(--night-bg) !important; }
   .night-mode-bar .mode-tab { 
     border-color: var(--night-border) !important; 
-    color: #7A6EA8 !important; 
+    color: #7A6EA8 !important; /* 未選中時的柔和紫色 */
   }
-  .night-mode-bar .mode-tab.night-active { 
-    background: var(--lavender-deep) !important; 
-    border-color: var(--lavender-deep) !important; 
-    color: #fff !important; 
+  /* 夜間模式下被選中的頁籤文字顏色 */
+  .night-mode-bar .mode-tab.active,
+  .night-mode-bar .mode-tab.night-active {
+    color: #ffffff !important;
   }
 
   .night-progress { background: var(--night-bg) !important; }
@@ -468,20 +319,16 @@
   .day-chip-night .day-label { color: #5A5070 !important; }
   .day-chip-night .day-num { color: #C8BEE8 !important; }
   .day-chip-night.active { background: var(--lavender-deep) !important; border-color: var(--lavender-deep) !important; }
-  .day-chip-night.active .day-num,
-  .day-chip-night.active .day-label { color: #fff !important; }
+  .day-chip-night.active .day-num, .day-chip-night.active .day-label { color: #fff !important; }
   .night-step-list { background: var(--night-bg) !important; }
   .night-reset { border-color: #3D3660 !important; color: #5A5070 !important; }
 
-  /* Animation */
-  .fade-in { animation: fadeIn .25s ease; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
   .step-card { animation: fadeIn .2s ease; }
 </style>
 </head>
 <body>
 <div class="app" id="app">
-
   <div class="header" id="header">
     <div class="header-top">
       <div class="app-title" id="appTitle">保養日誌</div>
@@ -512,419 +359,125 @@
 </div>
 
 <script>
-// SVG Icon Generator
 function svgIcon(pathStr, isMask = false) {
   const strokeColor = isMask ? '#FFFFFF' : 'var(--ink-mid)';
   return `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="${strokeColor}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${pathStr}</svg>`;
 }
 
-const nightMoonSVG = `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
-const daySunSVG = `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>`;
-
-// Data
 const P = {
-  dafen: {
-    name: '淨白煥采精露（大粉）',
-    brand: 'ELIXIR 怡麗絲爾',
-    tag: 'new', tagLabel: '新品',
-    tip: '第一步化妝水，拍打至吸收',
-    icon: svgIcon('<path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/>'),
-    color: '#FBF0F5'
-  },
-  haku: {
-    name: '驅黑淨白露 IV（HAKU）',
-    brand: 'HAKU 資生堂',
-    tag: 'new', tagLabel: '新品',
-    tip: '美白精華，輕拍全臉，重點顴骨',
-    icon: svgIcon('<path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/>'),
-    color: '#F0F4FB'
-  },
-  meijiru: {
-    name: '多效美肌乳（美肌乳）',
-    brand: 'ELIXIR 怡麗絲爾',
-    tag: 'opt', tagLabel: '新品（可選）',
-    tip: '乳液，由內向外推開',
-    icon: svgIcon('<path d="M8 10v10a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V10"/><path d="M12 10V6"/><path d="M10 6h4"/><path d="M12 2v4"/>'),
-    color: '#FAF4EC'
-  },
-  dakin: {
-    name: 'A醇超能撫紋精華（大金條）',
-    brand: 'ELIXIR 怡麗絲爾',
-    tag: 'warn', tagLabel: '⚠️ 夜間限定',
-    tip: '須於 大粉、歐舒丹 或 面膜 後使用。米粒大小，避開眼周',
-    icon: svgIcon('<path d="M9 3H15M10 3V12L4.5 19.5C3.8 20.4 4.5 21 5.5 21H18.5C19.5 21 20.2 20.4 19.5 19.5L14 12V3"/><path d="M6 16H18"/>'),
-    color: '#FFF8F0'
-  },
-  feifei: {
-    name: '膠原淨白煥采精乳（胖粉）',
-    brand: 'ELIXIR 怡麗絲爾',
-    tag: 'new', tagLabel: '新品',
-    tip: '乳液收尾，鎖住精華',
-    icon: svgIcon('<path d="M6 10v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V10"/><path d="M4 6h16v4H4z"/><path d="M8 3h8v3H8z"/>'),
-    color: '#FDF5F8'
-  },
-  loccitane: {
-    name: '蠟菊賦活菁露（歐舒丹）',
-    brand: "L'Occitane 歐舒丹",
-    tag: 'old', tagLabel: '舊品先用',
-    tip: '精華液，放化妝水後',
-    icon: svgIcon('<path d="M12 22v-7"/><path d="M8 10a4 4 0 0 1 8 0c0 4-4 5-4 5s-4-1-4-5z"/>'),
-    color: '#FEF9EC'
-  },
-  zengpin_gold: {
-    name: '膠原新肌光速精華（贈品金）',
-    brand: 'ELIXIR 怡麗絲爾',
-    tag: 'sample', tagLabel: '贈品小樣',
-    tip: '日間消耗小樣，薄薄一層',
-    icon: svgIcon('<path d="M9 2h6"/><path d="M10 2v4"/><path d="M14 2v4"/><path d="M8 6h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Z"/>'),
-    color: '#FFFAEC'
-  },
-  aa: {
-    name: '抗皺精露 AA（大藍）',
-    brand: 'REVITAL 莉薇特麗',
-    tag: 'old', tagLabel: '舊品先用',
-    tip: '不使用A醇的夜晚使用，勿同晚疊加',
-    icon: svgIcon('<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>'),
-    color: '#EEF0FC'
-  },
-  mask: {
-    name: '黑面膜 → 清洗 (非必選)',
-    brand: '面膜步驟',
-    tag: 'mask', tagLabel: '面膜',
-    tip: '敷完洗淨，再接續後面步驟',
-    icon: svgIcon('<rect width="18" height="18" x="3" y="3" rx="4"/><path d="M8 10h.01M16 10h.01M12 16c-1.5 0-3-1-3-2h6c0 1-1.5 2-3 2z"/>', true),
-    color: '#F5F5F5',
-    isMask: true,
-    isOptional: true // 週三週六面膜不計入進度
-  },
-  zengpin_blue: {
-    name: '御光奇肌精華（贈品藍）',
-    brand: 'REVITAL 莉薇特麗',
-    tag: 'sample', tagLabel: '贈品小樣',
-    tip: '若面膜後不乾，可擇一使用',
-    icon: svgIcon('<path d="M12 22a4 4 0 0 0 4-4V8l-4-4-4 4v10a4 4 0 0 0 4 4z"/><path d="M12 14v4"/>'),
-    color: '#F4F0FC'
-  },
-  xiaojintiao: {
-    name: 'd program 淨荳益生精華（小金條）',
-    brand: 'd program 資生堂',
-    tag: 'new', tagLabel: '新品',
-    tip: '【點塗】極少量點在痘痘患部，不要推開，否則底妝容易斑駁',
-    icon: svgIcon('<path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10ZM2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>'),
-    color: '#EAF5EE'
-  },
-  snowbeauty: {
-    name: 'Snow Beauty 保養粉',
-    brand: 'SHISEIDO 資生堂',
-    tag: 'new', tagLabel: '新品',
-    tip: '妝後定妝：有上粉底→粉底後拍；只擦美肌乳→直接拍',
-    icon: svgIcon('<path d="M2 12h20M12 2v20M4.93 4.93l14.14 14.14M4.93 19.07L19.07 4.93"/>'),
-    color: '#F0F4FB'
-  }
+  dafen: { name: '淨白煥采精露（大粉）', brand: 'ELIXIR 怡麗絲爾', tag: 'new', tagLabel: '新品', tip: '第一步化妝水，拍打至吸收', icon: svgIcon('<path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/>'), color: '#FBF0F5' },
+  haku: { name: '驅黑淨白露 IV（HAKU）', brand: 'HAKU 資生堂', tag: 'new', tagLabel: '新品', tip: '美白精華，輕拍全臉，重點顴骨', icon: svgIcon('<path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/>'), color: '#F0F4FB' },
+  meijiru: { name: '多效美肌乳（美肌乳）', brand: 'ELIXIR 怡麗絲爾', tag: 'opt', tagLabel: '新品（可選）', tip: '乳液，由內向外推開', icon: svgIcon('<path d="M8 10v10a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V10"/><path d="M12 10V6"/><path d="M10 6h4"/><path d="M12 2v4"/>'), color: '#FAF4EC' },
+  dakin: { name: 'A醇超能撫紋精華（大金條）', brand: 'ELIXIR 怡麗絲爾', tag: 'warn', tagLabel: '⚠️ 夜間限定', tip: '米粒大小，避開眼周', icon: svgIcon('<path d="M9 3H15M10 3V12L4.5 19.5C3.8 20.4 4.5 21 5.5 21H18.5C19.5 21 20.2 20.4 19.5 19.5L14 12V3"/><path d="M6 16H18"/>'), color: '#FFF8F0' },
+  feifei: { name: '膠原淨白煥采精乳（胖粉）', brand: 'ELIXIR 怡麗絲爾', tag: 'new', tagLabel: '新品', tip: '乳液收尾，鎖住精華', icon: svgIcon('<path d="M6 10v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V10"/><path d="M4 6h16v4H4z"/><path d="M8 3h8v3H8z"/>'), color: '#FDF5F8' },
+  loccitane: { name: '蠟菊賦活菁露（歐舒丹）', brand: "L'Occitane 歐舒丹", tag: 'old', tagLabel: '舊品', tip: '精華液，放化妝水後', icon: svgIcon('<path d="M12 22v-7"/><path d="M8 10a4 4 0 0 1 8 0c0 4-4 5-4 5s-4-1-4-5z"/>'), color: '#FEF9EC' },
+  zengpin_gold: { name: '膠原新肌光速精華（贈品金）', brand: 'ELIXIR 怡麗絲爾', tag: 'sample', tagLabel: '小樣', tip: '日間消耗小樣', icon: svgIcon('<path d="M9 2h6"/><path d="M10 2v4"/><path d="M14 2v4"/><path d="M8 6h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Z"/>'), color: '#FFFAEC' },
+  aa: { name: '抗皺精露 AA（大藍）', brand: 'REVITAL 莉薇特麗', tag: 'old', tagLabel: '舊品', tip: '不使用A醇的夜晚使用', icon: svgIcon('<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>'), color: '#EEF0FC' },
+  mask: { name: '黑面膜→清洗', brand: '我的心機茶樹控油調理荳荳黑面膜', tag: 'mask', tagLabel: '面膜(非必選)', tip: '10–15 分鐘', icon: svgIcon('<rect width="18" height="18" x="3" y="3" rx="4"/><path d="M8 10h.01M16 10h.01M12 16c-1.5 0-3-1-3-2h6c0 1-1.5 2-3 2z"/>', true), color: '#F5F5F5', isMask: true, isOptional: true },
+  zengpin_blue: { name: '御光奇肌精華（贈品藍）', brand: 'REVITAL 莉薇特麗', tag: 'sample', tagLabel: '小樣', tip: '如敷完濕潤，則不須擦', icon: svgIcon('<path d="M12 22a4 4 0 0 0 4-4V8l-4-4-4 4v10a4 4 0 0 0 4 4z"/><path d="M12 14v4"/>'), color: '#F4F0FC' }
 };
 
 const WEEK = [
-  { day:0, mode:'day', steps:['dafen','haku','meijiru'] },
-  { day:0, mode:'night', steps:['dafen', 'dakin', 'feifei'] },
-  { day:1, mode:'day', steps:['loccitane','zengpin_gold','meijiru'] },
-  { day:1, mode:'night', steps:['loccitane','aa','feifei'] },
-  { day:2, mode:'day', steps:['dafen','haku','meijiru'] },
-  { day:2, mode:'night', steps:['dafen', 'mask', 'zengpin_blue', 'feifei'] }, // 面膜選填
-  { day:3, mode:'day', steps:['dafen','haku','meijiru'] },
-  { day:3, mode:'night', steps:['dafen', 'dakin', 'feifei'] },
-  { day:4, mode:'day', steps:['loccitane','zengpin_gold','meijiru'] },
-  { day:4, mode:'night', steps:['loccitane','aa','feifei'] },
-  { day:5, mode:'day', steps:['dafen','haku','meijiru'] },
-  { day:5, mode:'night', steps:['dafen', 'mask', 'zengpin_blue', 'feifei'] }, // 面膜選填
-  { day:6, mode:'day', steps:['dafen','meijiru'] },
-  { day:6, mode:'night', steps:['loccitane','feifei'] },
+  { day:0, mode:'day', steps:['dafen','haku','meijiru'] }, { day:0, mode:'night', steps:['dafen', 'dakin', 'feifei'] },
+  { day:1, mode:'day', steps:['loccitane','zengpin_gold','meijiru'] }, { day:1, mode:'night', steps:['loccitane','aa','feifei'] },
+  { day:2, mode:'day', steps:['dafen','haku','meijiru'] }, { day:2, mode:'night', steps:['dafen', 'mask', 'zengpin_blue', 'feifei'] },
+  { day:3, mode:'day', steps:['dafen','haku','meijiru'] }, { day:3, mode:'night', steps:['dafen', 'dakin', 'feifei'] },
+  { day:4, mode:'day', steps:['loccitane','zengpin_gold','meijiru'] }, { day:4, mode:'night', steps:['loccitane','aa','feifei'] },
+  { day:5, mode:'day', steps:['dafen','haku','meijiru'] }, { day:5, mode:'night', steps:['dafen', 'mask', 'zengpin_blue', 'feifei'] },
+  { day:6, mode:'day', steps:['dafen','meijiru'] }, { day:6, mode:'night', steps:['loccitane','feifei'] }
 ];
 
-const MAKEUP_STEPS = ['dafen','haku','meijiru'];
-
-const MAKEUP_TIPS_HTML = `
-<div style="margin-top:4px">
-  <div style="font-size:12px;font-weight:600;color:inherit;margin-bottom:8px">💡 避免黏膩與起屑</div>
-  <div style="font-size:11.5px;line-height:1.7;font-weight:300">
-    <div style="margin-bottom:8px"><strong>1. 捨棄「胖粉」與「歐舒丹」</strong><br>妝前絕對不用胖粉（油脂含量高，會浮粉）；歐舒丹較滋潤，妝前統一換成大粉。</div>
-    <div style="margin-bottom:8px"><strong>2. 等待「成膜」是靈魂</strong><br>擦完美肌乳後先去刷牙或整理頭髮，等 1–2 分鐘，感覺皮膚有一層乾爽薄膜感後，再上粉底或保養粉。</div>
-    <div style="margin-bottom:8px"><strong>3. HAKU 或贈品金二選一且減半</strong><br>皮膚狀況好可直接跳過精華步驟，減少層次。</div>
-    <div><strong>4. 皮膚粗糙/擔心粉底卡粉</strong><br>可先用「贈品藍」擦拭容易起皮的地方（如鼻翼），再拍上「大粉」。</div>
-  </div>
-</div>`;
-
-// State
-let currentDay = 0;
-let currentMode = 'day'; 
-let progress = {}; 
-let weekDates = []; // Move here to persist shifts
+let currentDay = 0, currentMode = 'day', progress = {}, weekDates = [];
 
 function stateKey(d, m) { return d + '_' + m; }
-
-function getRoutine(d, m) {
-  if (m === 'makeup') return { steps: MAKEUP_STEPS };
-  return WEEK.find(w => w.day === d && w.mode === m) || WEEK[0];
-}
-
-function getDone(d, m) {
-  const k = stateKey(d, m);
-  if (!progress[k]) progress[k] = new Set();
-  return progress[k];
-}
-
-function toggleStep(idx) {
-  const done = getDone(currentDay, currentMode);
-  if (done.has(idx)) done.delete(idx);
-  else done.add(idx);
-  render();
-}
-
-// Init & Utils
-function getWeekDates() {
-  const now = new Date();
-  const jsDay = now.getDay(); 
-  const todayIdx = jsDay === 0 ? 6 : jsDay - 1; 
-  const dates = [];
-  for (let i = 0; i < 7; i++) {
-    const diff = i - todayIdx;
-    const d = new Date(now);
-    d.setDate(now.getDate() + diff);
-    dates.push(d);
-  }
-  return dates;
-}
-
-const WEEKDAY_SHORT = ['週一','週二','週三','週四','週五','週六','週日'];
-const WEEKDAY_MINI  = ['一','二','三','四','五','六','日'];
+function getRoutine(d, m) { return m === 'makeup' ? { steps: ['dafen','haku','meijiru'] } : (WEEK.find(w => w.day === d && w.mode === m) || WEEK[0]); }
+function getDone(d, m) { const k = stateKey(d, m); if (!progress[k]) progress[k] = new Set(); return progress[k]; }
 
 function initDayScroll() {
-  // 只有第一次載入時初始化，保留使用者切換後增加的日期
   if (weekDates.length === 0) {
-    weekDates = getWeekDates();
+    const now = new Date(), jsDay = now.getDay(), todayIdx = jsDay === 0 ? 6 : jsDay - 1;
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(now); d.setDate(now.getDate() + (i - todayIdx));
+      weekDates.push(d);
+    }
   }
-  const strip = document.getElementById('dayScroll');
-  strip.innerHTML = '';
-  WEEKDAY_MINI.forEach((label, i) => {
+  const strip = document.getElementById('dayScroll'); strip.innerHTML = '';
+  ['一','二','三','四','五','六','日'].forEach((label, i) => {
     const btn = document.createElement('button');
     btn.className = 'day-chip' + (i === currentDay ? ' active' : '');
     btn.id = 'daychip_' + i;
-    const mDone = getDone(i, 'day').size > 0 || getDone(i,'night').size > 0 || getDone(i,'makeup').size > 0;
-    if (mDone) btn.classList.add('has-done');
-
-    const d = weekDates[i];
-    const mo = d ? (d.getMonth()+1) : '';
-    const dt = d ? d.getDate() : '';
-    btn.innerHTML = `<span class="day-label">${label}</span>
-      <span class="day-num">${mo}/${dt}</span>
-      <span class="done-dot"></span>`;
+    btn.innerHTML = `<span class="day-label">${label}</span><span class="day-num">${weekDates[i].getMonth()+1}/${weekDates[i].getDate()}</span><span class="done-dot"></span>`;
     btn.onclick = () => { currentDay = i; render(); };
     strip.appendChild(btn);
   });
 }
 
 function updateDayScroll() {
-  WEEKDAY_MINI.forEach((_, i) => {
-    const chip = document.getElementById('daychip_' + i);
-    if (!chip) return;
-    chip.className = 'day-chip';
-    if (i === currentDay) chip.classList.add('active');
-    const mDone = getDone(i,'day').size>0 || getDone(i,'night').size>0 || getDone(i,'makeup').size>0;
-    if (mDone) chip.classList.add('has-done');
-    if (currentMode === 'night') chip.classList.add('day-chip-night');
-  });
-}
-
-function setMode(m) {
-  currentMode = m;
-  render();
-}
-
-function applyNightTheme(on) {
-  const app = document.getElementById('app');
-  const header = document.getElementById('header');
-  const modeBar = document.getElementById('modeBar');
-  const ps = document.getElementById('progressSection');
-  const div = document.getElementById('divider');
-  const sl = document.getElementById('stepList');
-  const title = document.getElementById('appTitle');
-  const date = document.getElementById('todayDate');
-
-  if (on) {
-    app.classList.add('night-mode-bg');
-    header.classList.add('night-header');
-    modeBar.classList.add('night-mode-bar');
-    ps.classList.add('night-progress');
-    div.classList.add('night-divider');
-    sl.classList.add('night-step-list');
-    title.classList.add('app-title-night');
-    date.classList.add('today-date-night');
-  } else {
-    app.classList.remove('night-mode-bg');
-    header.classList.remove('night-header');
-    modeBar.classList.remove('night-mode-bar');
-    ps.classList.remove('night-progress');
-    div.classList.remove('night-divider');
-    sl.classList.remove('night-step-list');
-    title.classList.remove('app-title-night');
-    date.classList.remove('today-date-night');
+  for(let i=0; i<7; i++){
+    const chip = document.getElementById('daychip_' + i); if (!chip) continue;
+    chip.className = 'day-chip' + (i === currentDay ? ' active' : '') + (getDone(i,'day').size>0 || getDone(i,'night').size>0 || getDone(i,'makeup').size>0 ? ' has-done' : '') + (currentMode === 'night' ? ' day-chip-night' : '');
   }
 }
+
+function setMode(m) { currentMode = m; render(); }
 
 function render() {
   const isNight = currentMode === 'night';
-  const isMakeup = currentMode === 'makeup';
-  applyNightTheme(isNight);
+  document.getElementById('app').className = 'app' + (isNight ? ' night-mode-bg' : '');
+  document.getElementById('header').className = 'header' + (isNight ? ' night-header' : '');
+  document.getElementById('modeBar').className = 'mode-bar' + (isNight ? ' night-mode-bar' : '');
+  document.getElementById('progressSection').className = 'progress-section' + (isNight ? ' night-progress' : '');
+  document.getElementById('divider').className = 'divider' + (isNight ? ' night-divider' : '');
+  document.getElementById('appTitle').className = 'app-title' + (isNight ? ' app-title-night' : '');
+  document.getElementById('todayDate').className = 'today-date' + (isNight ? ' today-date-night' : '');
 
-  ['tabDay','tabNight','tabMakeup'].forEach(id => {
-    const el = document.getElementById(id);
-    el.classList.remove('active','night-active');
-  });
-  if (currentMode === 'day')    document.getElementById('tabDay').classList.add('active');
-  if (currentMode === 'night')  document.getElementById('tabNight').classList.add('night-active');
-  if (currentMode === 'makeup') document.getElementById('tabMakeup').classList.add('active');
+  ['tabDay','tabNight','tabMakeup'].forEach(id => document.getElementById(id).classList.remove('active','night-active'));
+  document.getElementById(currentMode === 'day' ? 'tabDay' : (currentMode === 'night' ? 'tabNight' : 'tabMakeup')).classList.add(isNight ? 'night-active' : 'active');
 
   updateDayScroll();
+  const routine = getRoutine(currentDay, currentMode), done = getDone(currentDay, currentMode);
+  const trackableIndices = routine.steps.map((p, i) => P[p].isOptional ? -1 : i).filter(i => i !== -1);
+  const doneCount = trackableIndices.filter(i => done.has(i)).length;
 
-  const routine = getRoutine(currentDay, currentMode);
-  const steps = routine.steps;
-  const done = getDone(currentDay, currentMode);
-  
-  // 進度條計算：排除 isOptional 的步驟
-  const trackableStepsIndices = steps.map((pid, idx) => P[pid].isOptional ? -1 : idx).filter(i => i !== -1);
-  const trackableTotal = trackableStepsIndices.length;
-  const trackableDoneCount = trackableStepsIndices.filter(idx => done.has(idx)).length;
+  document.getElementById('progressCount').textContent = `${doneCount} / ${trackableIndices.length}`;
+  document.getElementById('progressFill').style.width = (trackableIndices.length ? (doneCount/trackableIndices.length*100) : 0) + '%';
+  document.getElementById('progressLabel').textContent = `${['週一','週二','週三','週四','週五','週六','週日'][currentDay]} ${currentMode==='day'?'日間':currentMode==='night'?'夜間':'化妝日'}`;
 
-  document.getElementById('progressCount').textContent = trackableDoneCount + ' / ' + trackableTotal;
-  document.getElementById('progressFill').style.width = (trackableTotal ? (trackableDoneCount/trackableTotal*100) : 0) + '%';
-  document.getElementById('progressLabel').textContent =
-    WEEKDAY_SHORT[currentDay] + (currentMode==='day'?' 日間':currentMode==='night'?' 夜間':' 化妝日');
-
-  const list = document.getElementById('stepList');
-  list.innerHTML = '';
-
-  // 渲染步驟卡片
-  steps.forEach((pid, i) => {
-    const p = P[pid];
-    const isDone = done.has(i);
-    // 下一個要做的步驟（排除非必選）
-    const nextIdx = trackableStepsIndices.find(idx => !done.has(idx));
-    const isNext = i === nextIdx;
-
+  const list = document.getElementById('stepList'); list.innerHTML = '';
+  routine.steps.forEach((pid, i) => {
+    const p = P[pid], isDone = done.has(i), isNext = i === trackableIndices.find(idx => !done.has(idx));
     const card = document.createElement('div');
-    card.className = 'step-card' +
-      (isNight ? ' night-card' : '') +
-      (isDone ? ' is-done' : '') +
-      (isNext && !isDone ? ' is-next' : '');
-    card.onclick = () => toggleStep(i);
-
-    const iconDiv = document.createElement('div');
-    iconDiv.className = 'prod-icon';
-    iconDiv.style.background = p.color;
-    if (p.isMask) iconDiv.style.background = '#1A1A1A';
-    iconDiv.innerHTML = p.icon;
-
-    const body = document.createElement('div');
-    body.className = 'step-body';
-    body.innerHTML = `
-      <div class="step-top-row">
-        <span class="step-num">${i + 1}</span>
-        <span class="step-badge badge-${p.tag}">${p.tagLabel}${p.isOptional ? ' (選填)' : ''}</span>
-      </div>
-      <div class="step-name">${p.name}</div>
-      <div class="step-brand">${p.brand}</div>
-      <div class="step-tip">${p.tip}</div>
-    `;
-
-    const checkWrap = document.createElement('div');
-    checkWrap.className = 'check-wrap';
-    const circle = document.createElement('div');
-    circle.className = 'check-circle';
-    if (isDone) {
-      circle.innerHTML = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7L5.5 10L11.5 4" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-    }
-    checkWrap.appendChild(circle);
-
-    card.appendChild(iconDiv);
-    card.appendChild(body);
-    card.appendChild(checkWrap);
+    card.className = `step-card ${isNight?'night-card':''} ${isDone?'is-done':''} ${isNext?'is-next':''}`;
+    card.onclick = () => { if (isDone) done.delete(i); else done.add(i); render(); };
+    card.innerHTML = `<div class="prod-icon" style="background:${p.isMask?'#1A1A1A':p.color}">${p.icon}</div>
+      <div class="step-body"><div class="step-top-row"><span class="step-num">${i+1}</span><span class="step-badge badge-${p.tag}">${p.tagLabel}</span></div><div class="step-name">${p.name}</div><div class="step-brand">${p.brand}</div><div class="step-tip">${p.tip}</div></div>
+      <div class="check-circle">${isDone?'<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7L5.5 10L11.5 4" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>':''}</div>`;
     list.appendChild(card);
   });
 
-  // 全部完成橫幅
-  if (trackableDoneCount === trackableTotal && trackableTotal > 0) {
-    const banner = document.createElement('div');
-    banner.className = 'done-banner' + (isNight ? ' night-done' : '');
-    banner.innerHTML = `<div class="done-icon">${isNight ? nightMoonSVG : daySunSVG}</div>
-      <div class="done-title">${isNight ? '晚安' : '完成了'}</div>
-      <div class="done-sub">${WEEKDAY_SHORT[currentDay]}${currentMode==='day'?' 日間':currentMode==='night'?' 夜間':' 化妝日'}保養全部完成</div>`;
-    list.appendChild(banner);
-  }
-
-  // 底部 REMINDER
-  const rb = document.createElement('div');
-  rb.className = 'section-note ' + (isNight ? 'note-night' : 'note-day');
-  rb.style.marginTop = '16px';
-  rb.innerHTML = '<strong>REMINDER：</strong>「小金條」須於 大粉、歐舒丹 或 面膜 後使用。';
-  list.appendChild(rb);
-
-  // 化妝日專屬提示
-  if (isMakeup) {
-    const tipsBox = document.createElement('div');
-    tipsBox.className = 'section-note note-day';
-    tipsBox.style.display = 'block';
-    tipsBox.innerHTML = MAKEUP_TIPS_HTML;
-    list.appendChild(tipsBox);
-  }
-
-  // 1. 重置本次進度按鈕
   const resetBtn = document.createElement('button');
   resetBtn.className = 'reset-btn' + (isNight ? ' night-reset' : '');
   resetBtn.textContent = '重置本次進度';
-  resetBtn.onclick = (e) => {
-    e.stopPropagation();
-    progress[stateKey(currentDay, currentMode)] = new Set();
-    render();
-  };
+  resetBtn.onclick = (e) => { e.stopPropagation(); progress[stateKey(currentDay, currentMode)] = new Set(); render(); };
   list.appendChild(resetBtn);
 
-  // 2. 完成當日進度按鈕 (僅夜間模式顯示)
   if (isNight) {
     const completeBtn = document.createElement('button');
     completeBtn.className = 'reset-btn complete-btn';
     completeBtn.textContent = '完成當日進度';
     completeBtn.onclick = (e) => {
-      e.stopPropagation();
-      
-      // 將當前日期的日期往後推 7 天
-      const d = weekDates[currentDay];
-      d.setDate(d.getDate() + 7);
-      
-      // 自動重置該天的 日間/夜晚/化妝日 進度
-      progress[stateKey(currentDay, 'day')] = new Set();
-      progress[stateKey(currentDay, 'night')] = new Set();
-      progress[stateKey(currentDay, 'makeup')] = new Set();
-      
-      // 重新渲染上方日期滾動條
-      initDayScroll();
-      
-      // 重新渲染畫面
-      render();
+      e.stopPropagation(); weekDates[currentDay].setDate(weekDates[currentDay].getDate() + 7);
+      ['day','night','makeup'].forEach(m => progress[stateKey(currentDay, m)] = new Set());
+      initDayScroll(); render();
     };
     list.appendChild(completeBtn);
   }
 }
 
-// Start
-(function() {
-  const now = new Date();
-  const weekNames = ['週日','週一','週二','週三','週四','週五','週六'];
-  document.getElementById('todayDate').innerHTML = `${weekNames[now.getDay()]}&nbsp;${now.getMonth() + 1}/${now.getDate()}`;
-  const jsDay = now.getDay();
-  currentDay = jsDay === 0 ? 6 : jsDay - 1;
-})();
-
-initDayScroll();
-render();
+const n = new Date(), jd = n.getDay();
+currentDay = jd === 0 ? 6 : jd - 1;
+document.getElementById('todayDate').innerHTML = `${['週日','週一','週二','週三','週四','週五','週六'][jd]}&nbsp;${n.getMonth()+1}/${n.getDate()}`;
+initDayScroll(); render();
 </script>
 </body>
 </html>
