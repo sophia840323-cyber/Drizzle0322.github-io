@@ -36,7 +36,7 @@
   .screen{display:none;flex:1;flex-direction:column;overflow:hidden}
   .screen.visible{display:flex}
 
-  /* ══════════════ ROUTINE SCREEN ══════════════ */
+  /* ══ ROUTINE SCREEN ══ */
   .header{padding:calc(var(--safe-top) + 14px) 16px 0;background:var(--warm-white);flex-shrink:0}
   .header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding:0 4px}
   .app-title{font-family:'DM Serif Display',serif;font-size:22px;color:var(--rose-deep);letter-spacing:.02em}
@@ -99,7 +99,7 @@
   .night-card .step-brand{color:#7A6EA8}
   .step-tip{font-size:11.5px;color:var(--ink-light);line-height:1.55;font-weight:300}
   .night-card .step-tip{color:#8A7EAA}
-  .check-circle{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--blush);display:flex;align-items:center;justify-content:center;transition:all .2s}
+  .check-circle{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--blush);display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
   .is-done .check-circle{background:var(--sage);border-color:var(--sage)}
   .night-card .check-circle{border-color:var(--night-border)}
   .night-card.is-done .check-circle{background:var(--lavender-deep);border-color:var(--lavender-deep)}
@@ -108,10 +108,12 @@
   .done-banner.night-done{background:#2A2540;border-color:var(--lavender-deep)}
   .done-banner.night-done .done-title{color:#C8BEE8}
   .reminder-box{margin-bottom:14px;padding:8px 12px;border-radius:10px;font-size:11px;line-height:1.5;border:1px dashed var(--blush);background:rgba(232,213,196,.1);color:var(--ink-mid);text-align:center}
-  .reminder-box strong{color:var(--rose-deep);font-weight:500}
   .night-reminder{border-color:var(--night-border);background:rgba(61,54,96,.2);color:#8A7EAA}
-  .night-reminder strong{color:#C8BEE8}
-  .reset-btn{width:100%;padding:11px;border-radius:10px;border:1px solid var(--blush);background:transparent;font-family:'Noto Serif TC',serif;font-size:12px;color:var(--ink-light);cursor:pointer;margin-top:12px;transition:all .2s;letter-spacing:.04em}
+  .reset-btn{width:100%;padding:11px;border-radius:10px;border:1px solid var(--blush);background:transparent;font-family:'Noto Serif TC',serif;font-size:12px;color:var(--ink-light);cursor:pointer;margin-top:10px;transition:all .2s;letter-spacing:.04em}
+  .reset-btn:active{background:var(--parchment)}
+  /* 當日完成 button */
+  .complete-day-btn{width:100%;padding:13px;border-radius:12px;border:none;background:var(--lavender-deep);color:#fff;font-family:'Noto Serif TC',serif;font-size:14px;font-weight:500;cursor:pointer;margin-top:10px;letter-spacing:.04em;transition:opacity .2s}
+  .complete-day-btn:active{opacity:.82}
 
   /* Night mode */
   .night-mode-bg{background:var(--night-bg)!important}
@@ -126,66 +128,95 @@
   .night-progress .progress-count{color:#C8BEE8!important}
   .night-divider{background:#2A2540!important}
   .app-title-night{color:#C8BEE8!important}
-  .today-date-night{color:#5A5070!important}
-  .day-chip-night{border-color:#3D3660!important}
-  .day-chip-night .day-label{color:#5A5070!important}
-  .day-chip-night .day-num{color:#C8BEE8!important}
+  .today-date-night{color:#7A6E8A!important}
+  .day-chip-night{border-color:#6A6090!important}
+  .day-chip-night .day-label{color:#9A90B8!important}
+  .day-chip-night .day-num{color:#D8D0F0!important}
   .day-chip-night.active{background:var(--lavender-deep)!important;border-color:var(--lavender-deep)!important}
   .day-chip-night.active .day-num,.day-chip-night.active .day-label{color:#fff!important}
+  .day-chip-night.has-done{border-color:#6A9068!important}
+  .day-chip-night.has-done .day-num{color:#9FD09A!important}
   .night-step-list{background:var(--night-bg)!important}
-  .night-reset{border-color:#3D3660!important;color:#5A5070!important}
+  .night-reset{border-color:#5A5080!important;color:#9A90B8!important}
 
-  /* ══════════════ CALENDAR SCREEN ══════════════ */
-  .cal-screen{overflow-y:auto;padding:calc(var(--safe-top) + 14px) 16px calc(var(--safe-bottom) + 16px)}
-  .cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding:0 4px}
+  /* ══ CALENDAR SCREEN — base (day mode) ══ */
+  .cal-screen{overflow-y:auto;padding:calc(var(--safe-top) + 14px) 16px 20px;transition:background .2s}
+  .cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;padding:0 4px}
   .cal-title{font-family:'DM Serif Display',serif;font-size:20px;color:var(--rose-deep)}
   .cal-nav-btn{width:32px;height:32px;border-radius:50%;border:1px solid var(--blush);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ink-mid)}
   .cal-nav-btn:active{background:var(--parchment)}
   .cal-weekdays{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:6px}
   .cal-wday{text-align:center;font-size:10px;color:var(--ink-light);padding:4px 0;font-weight:400}
-  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:14px}
   .cal-cell{aspect-ratio:1;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;position:relative;border:1px solid transparent;transition:all .15s;background:transparent}
-  .cal-cell:active{background:var(--parchment)}
-  .cal-cell.today{border-color:var(--rose-muted)}
+  .cal-cell:not(.future):not(.empty):active{background:var(--parchment)}
+  .cal-cell.today{border-color:var(--rose-muted);background:rgba(184,128,106,.06)}
   .cal-cell.today .cal-date{color:var(--rose-deep);font-weight:500}
-  .cal-cell.future{opacity:.35;cursor:default}
+  .cal-cell.future{opacity:.3;cursor:default}
   .cal-cell.empty{cursor:default}
-  .cal-date{font-size:13px;color:var(--ink);font-family:'DM Serif Display',serif;line-height:1}
-  .cal-dots{display:flex;gap:2px;margin-top:3px;height:5px;align-items:center;justify-content:center}
-  .cal-dot{width:4px;height:4px;border-radius:50%;flex-shrink:0}
+  .cal-date{font-size:14px;color:var(--ink);font-family:'DM Serif Display',serif;line-height:1}
+  .cal-dots{display:flex;gap:2px;margin-top:4px;height:5px;align-items:center;justify-content:center}
+  .cal-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
   .dot-day{background:var(--rose-muted)}
   .dot-night{background:var(--lavender-deep)}
-  .dot-makeup{background:var(--gold)}
   .dot-note{background:var(--sage)}
-  .cal-cell.has-all .cal-date{color:var(--sage)}
-  .cal-legend{display:flex;gap:12px;margin:16px 4px 20px;flex-wrap:wrap}
+  .cal-legend{display:flex;gap:14px;margin:2px 4px 16px;flex-wrap:wrap}
   .legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--ink-light)}
   .legend-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 
-  /* Day detail modal */
-  .day-modal{position:absolute;bottom:0;left:0;right:0;background:var(--warm-white);border-radius:20px 20px 0 0;border-top:1px solid var(--blush);padding:0 20px calc(var(--safe-bottom) + 20px);transform:translateY(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);z-index:100;max-height:85dvh;overflow-y:auto}
-  .day-modal.open{transform:translateY(0)}
-  .modal-handle{width:36px;height:4px;border-radius:2px;background:var(--blush);margin:12px auto 16px}
-  .modal-date-title{font-family:'DM Serif Display',serif;font-size:20px;color:var(--rose-deep);margin-bottom:4px}
-  .modal-subtitle{font-size:11px;color:var(--ink-light);margin-bottom:20px;font-weight:300}
-  .modal-section{margin-bottom:20px}
-  .modal-section-title{font-size:11px;font-weight:500;color:var(--ink-mid);letter-spacing:.05em;text-transform:uppercase;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--parchment)}
-  .done-pills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
-  .done-pill{font-size:11px;padding:4px 10px;border-radius:14px;border:1px solid var(--blush);color:var(--ink-mid);background:var(--parchment)}
-  .done-pill.active{background:var(--sage-light);border-color:var(--sage);color:#2A4F28}
-  .note-area{width:100%;min-height:80px;border:1px solid var(--blush);border-radius:10px;padding:10px 12px;font-family:'Noto Serif TC',serif;font-size:13px;color:var(--ink);background:var(--warm-white);resize:none;line-height:1.6;outline:none;-webkit-appearance:none}
-  .note-area:focus{border-color:var(--rose-muted)}
-  .note-area::placeholder{color:var(--ink-light);font-weight:300}
-  .mood-row{display:flex;gap:8px;margin-bottom:12px}
-  .mood-btn{flex:1;padding:8px 4px;border-radius:10px;border:1px solid var(--blush);background:transparent;font-size:18px;cursor:pointer;transition:all .15s;text-align:center}
-  .mood-btn.selected{border-color:var(--rose);background:var(--parchment);transform:scale(1.05)}
-  .save-btn{width:100%;padding:12px;border-radius:12px;border:none;background:var(--rose-deep);color:#fff;font-family:'Noto Serif TC',serif;font-size:14px;font-weight:500;cursor:pointer;margin-top:4px;transition:opacity .2s}
-  .save-btn:active{opacity:.85}
-  .close-modal-btn{position:absolute;top:14px;right:20px;width:28px;height:28px;border-radius:50%;border:1px solid var(--blush);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ink-light)}
-  .modal-overlay{position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.3);z-index:99;opacity:0;pointer-events:none;transition:opacity .3s}
-  .modal-overlay.open{opacity:1;pointer-events:all}
+  /* Quick note strip — day mode */
+  .quick-note-strip{background:var(--parchment);border-radius:14px;padding:14px 16px;margin-bottom:16px;transition:background .2s,border-color .2s}
+  .qn-title{font-size:11px;font-weight:500;color:var(--ink-mid);letter-spacing:.05em;margin-bottom:10px}
+  .qn-selected-date{font-family:'DM Serif Display',serif;font-size:16px;color:var(--rose-deep);margin-bottom:8px}
+  .qn-mood-row{display:flex;gap:6px;margin-bottom:10px}
+  .qn-mood-btn{flex:1;padding:6px 2px;border-radius:8px;border:1px solid var(--blush);background:transparent;font-size:16px;cursor:pointer;transition:all .15s;text-align:center}
+  .qn-mood-btn.selected{border-color:var(--rose);background:#FEF0EC;transform:scale(1.06)}
+  .qn-textarea{width:100%;min-height:70px;border:1px solid var(--blush);border-radius:10px;padding:9px 12px;font-family:'Noto Serif TC',serif;font-size:13px;color:var(--ink);background:var(--warm-white);resize:none;line-height:1.6;outline:none;-webkit-appearance:none}
+  .qn-textarea:focus{border-color:var(--rose-muted)}
+  .qn-textarea::placeholder{color:var(--ink-light);font-weight:300}
+  .qn-save-btn{margin-top:8px;width:100%;padding:10px;border-radius:10px;border:none;background:var(--rose-deep);color:#fff;font-family:'Noto Serif TC',serif;font-size:13px;font-weight:500;cursor:pointer;transition:opacity .2s}
+  .qn-save-btn:active{opacity:.82}
+  .qn-pills-row{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
+  .qn-pill{font-size:10px;padding:3px 9px;border-radius:12px;border:1px solid var(--blush);color:var(--ink-mid);background:var(--warm-white);cursor:pointer;transition:all .15s}
+  .qn-pill.active{background:var(--sage-light);border-color:var(--sage);color:#2A4F28}
+  .qn-section-label{font-size:10px;color:var(--ink-light);margin:8px 0 5px}
 
-  /* ══════════════ STATS SCREEN ══════════════ */
+  /* ══ CALENDAR — night mode overrides ══ */
+  .cal-night .cal-screen{background:var(--night-bg)}
+  .cal-night .cal-title{color:#C8BEE8}
+  .cal-night .cal-nav-btn{border-color:#5A5080;color:#A090C8}
+  .cal-night .cal-nav-btn:active{background:#2A2540}
+  .cal-night .cal-wday{color:#6A6090}
+  .cal-night .cal-date{color:#D8D0F0}
+  .cal-night .cal-cell.today{border-color:#9080C8;background:rgba(128,112,168,.18)}
+  .cal-night .cal-cell.today .cal-date{color:#E0D4FF;font-weight:500}
+  .cal-night .cal-cell:not(.future):not(.empty):active{background:#2A2540}
+  .cal-night .cal-cell.selected-cell{border-color:#9080C8 !important;background:rgba(128,112,168,.25) !important}
+  .cal-night .cal-cell.selected-cell .cal-date{color:#E0D4FF}
+  .cal-night .cal-cell.future{opacity:.2}
+  .cal-night .dot-day{background:#C9A99A}
+  .cal-night .dot-night{background:#A090D8}
+  .cal-night .dot-note{background:#7AB878}
+  .cal-night .legend-item{color:#7A6E98}
+  .cal-night .cal-legend .legend-dot.dot-day{background:#C9A99A}
+  .cal-night .cal-legend .legend-dot.dot-night{background:#A090D8}
+  .cal-night .cal-legend .legend-dot.dot-note{background:#7AB878}
+  /* quick-note strip night */
+  .cal-night .quick-note-strip{background:#2A2540;border:1px solid #4A4070}
+  .cal-night .qn-title{color:#9A90B8}
+  .cal-night .qn-selected-date{color:#C8BEE8}
+  .cal-night .qn-section-label{color:#6A6090}
+  .cal-night .qn-mood-btn{border-color:#4A4070;color:#C8BEE8}
+  .cal-night .qn-mood-btn.selected{border-color:#9080C8;background:#3A3060;transform:scale(1.06)}
+  .cal-night .qn-textarea{background:#1E1A2E;border-color:#4A4070;color:#D8D0F0}
+  .cal-night .qn-textarea::placeholder{color:#5A5078}
+  .cal-night .qn-textarea:focus{border-color:#8070A8}
+  .cal-night .qn-pill{background:#2A2540;border-color:#4A4070;color:#A090C8}
+  .cal-night .qn-pill.active{background:#3A3860;border-color:#8070A8;color:#C8BEE8}
+  .cal-night .qn-save-btn{background:#6050A0}
+  .cal-night .cal-screen{background:var(--night-bg) !important}
+
+  /* ══ STATS SCREEN ══ */
   .stats-screen{overflow-y:auto;padding:calc(var(--safe-top) + 14px) 16px calc(var(--safe-bottom) + 80px)}
   .stats-title{font-family:'DM Serif Display',serif;font-size:22px;color:var(--rose-deep);margin-bottom:20px;padding:0 4px}
   .stat-card{background:var(--parchment);border-radius:14px;padding:16px;margin-bottom:14px}
@@ -203,7 +234,6 @@
   .bar-fill{height:100%;border-radius:3px;background:var(--rose-muted);transition:width .4s}
   .bar-fill.night-bar{background:var(--lavender-deep)}
   .bar-count{font-size:10px;color:var(--ink-light);width:20px;text-align:right;flex-shrink:0}
-  .recent-notes{margin-top:0}
   .note-entry{padding:12px 0;border-bottom:1px solid var(--parchment)}
   .note-entry:last-child{border-bottom:none}
   .note-entry-date{font-size:10px;color:var(--ink-light);margin-bottom:4px;font-weight:300;display:flex;align-items:center;gap:6px}
@@ -267,37 +297,26 @@
         <div class="legend-item"><div class="legend-dot dot-night"></div>夜間完成</div>
         <div class="legend-item"><div class="legend-dot dot-note"></div>有筆記</div>
       </div>
-    </div>
-    <!-- Modal overlay -->
-    <div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
-    <!-- Day detail modal -->
-    <div class="day-modal" id="dayModal">
-      <div class="modal-handle"></div>
-      <button class="close-modal-btn" onclick="closeModal()">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 2l10 10M12 2L2 12"/></svg>
-      </button>
-      <div class="modal-date-title" id="modalDateTitle"></div>
-      <div class="modal-subtitle" id="modalSubtitle">點選完成項目，記錄今日保養</div>
-      <div class="modal-section">
-        <div class="modal-section-title">完成項目</div>
-        <div id="modalDayPills"></div>
-        <div id="modalNightPills"></div>
-      </div>
-      <div class="modal-section">
-        <div class="modal-section-title">今日感受</div>
-        <div class="mood-row" id="moodRow">
-          <button class="mood-btn" data-mood="✨" onclick="selectMood('✨')">✨</button>
-          <button class="mood-btn" data-mood="😊" onclick="selectMood('😊')">😊</button>
-          <button class="mood-btn" data-mood="😐" onclick="selectMood('😐')">😐</button>
-          <button class="mood-btn" data-mood="😔" onclick="selectMood('😔')">😔</button>
-          <button class="mood-btn" data-mood="🔥" onclick="selectMood('🔥')">🔥</button>
+      <!-- Inline note / entry panel -->
+      <div class="quick-note-strip" id="quickNoteStrip" style="display:none">
+        <div class="qn-title">📝 記錄</div>
+        <div class="qn-selected-date" id="qnDateLabel"></div>
+        <div class="qn-section-label">☀️ 日間完成項目</div>
+        <div class="qn-pills-row" id="qnDayPills"></div>
+        <div class="qn-section-label">🌙 夜間完成項目</div>
+        <div class="qn-pills-row" id="qnNightPills"></div>
+        <div class="qn-section-label">今日感受</div>
+        <div class="qn-mood-row" id="qnMoodRow">
+          <button class="qn-mood-btn" data-mood="✨" onclick="qnSelectMood('✨')">✨</button>
+          <button class="qn-mood-btn" data-mood="😊" onclick="qnSelectMood('😊')">😊</button>
+          <button class="qn-mood-btn" data-mood="😐" onclick="qnSelectMood('😐')">😐</button>
+          <button class="qn-mood-btn" data-mood="😔" onclick="qnSelectMood('😔')">😔</button>
+          <button class="qn-mood-btn" data-mood="🔥" onclick="qnSelectMood('🔥')">🔥</button>
         </div>
+        <div class="qn-section-label">筆記</div>
+        <textarea class="qn-textarea" id="qnTextarea" placeholder="皮膚狀況、反應、感受…"></textarea>
+        <button class="qn-save-btn" onclick="saveQuickNote()">儲存</button>
       </div>
-      <div class="modal-section">
-        <div class="modal-section-title">筆記</div>
-        <textarea class="note-area" id="noteTextarea" placeholder="皮膚狀況、反應、感受…"></textarea>
-      </div>
-      <button class="save-btn" onclick="saveModalEntry()">儲存</button>
     </div>
   </div>
 
@@ -324,9 +343,9 @@
 </div>
 
 <script>
-// ══════════════════════════════════════════
+// ═══════════════════════════════════════════
 // DATA
-// ══════════════════════════════════════════
+// ═══════════════════════════════════════════
 function svgIcon(p,isMask=false){const s=isMask?'#FFF':'var(--ink-mid)';return`<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="${s}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`}
 
 const P={
@@ -352,151 +371,206 @@ const WEEK=[
   {day:6,mode:'day',steps:['dafen','meijiru']},{day:6,mode:'night',steps:['loccitane','feifei']}
 ];
 
-// ══════════════════════════════════════════
-// PERSISTENCE (localStorage)
-// ══════════════════════════════════════════
-const STORAGE_KEY = 'skincare_v2';
+// Makeup steps —归类为日間
+const MAKEUP_STEPS = ['dafen','haku','meijiru'];
+
+// ═══════════════════════════════════════════
+// PERSISTENCE
+// ═══════════════════════════════════════════
+const STORAGE_KEY = 'skincare_v3';
 
 function loadData() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return {};
     const d = JSON.parse(raw);
-    // Convert arrays back to Sets for progress
-    if (d.progress) {
-      Object.keys(d.progress).forEach(k => {
-        d.progress[k] = new Set(d.progress[k]);
-      });
-    }
+    if (d.progress) Object.keys(d.progress).forEach(k => { d.progress[k] = new Set(d.progress[k]); });
     return d;
   } catch(e) { return {}; }
 }
 
 function saveData() {
   try {
-    const toSave = {
-      progress: {},
-      calEntries: calEntries,
-      weekDatesBase: weekDatesBase
-    };
-    // Convert Sets to arrays
-    Object.keys(progress).forEach(k => {
-      toSave.progress[k] = [...progress[k]];
-    });
+    const toSave = { progress:{}, calEntries, weekDatesBase };
+    Object.keys(progress).forEach(k => { toSave.progress[k] = [...progress[k]]; });
     localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
   } catch(e) {}
 }
 
-// ══════════════════════════════════════════
+// ═══════════════════════════════════════════
 // STATE
-// ══════════════════════════════════════════
+// ═══════════════════════════════════════════
 let currentDay = 0, currentMode = 'day';
-let progress = {};   // weekday key → Set of done indices
-let calEntries = {}; // 'YYYY-MM-DD' → { dayDone:[], nightDone:[], mood, note }
-let weekDatesBase = null; // ISO string of Monday of current week
-
+let progress = {};
+let calEntries = {};   // 'YYYY-MM-DD' → { dayDone:[], nightDone:[], mood:'', note:'' }
+let weekDatesBase = null;
 let weekDates = [];
+let prevWeekDatesBase = null; // for retreat/undo
+let isNextWeek = false;       // currently viewing next week
 let calYear, calMonth;
-let modalDateKey = null;
+let qnDateKey = null;  // currently selected date in calendar panel
 let currentScreen = 'routine';
 
-// Load persisted data
 const saved = loadData();
 if (saved.progress) progress = saved.progress;
 if (saved.calEntries) calEntries = saved.calEntries;
 if (saved.weekDatesBase) weekDatesBase = saved.weekDatesBase;
 
-// ══════════════════════════════════════════
+// ═══════════════════════════════════════════
 // HELPERS
-// ══════════════════════════════════════════
+// ═══════════════════════════════════════════
 function dateKey(d) {
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 }
 function stateKey(d,m){return d+'_'+m}
-function getRoutine(d,m){return m==='makeup'?{steps:['dafen','haku','meijiru']}:(WEEK.find(w=>w.day===d&&w.mode===m)||WEEK[0])}
+function getRoutine(d,m){
+  if(m==='makeup') return {steps:MAKEUP_STEPS, isMakeup:true};
+  return WEEK.find(w=>w.day===d&&w.mode===m)||WEEK[0];
+}
 function getDone(d,m){const k=stateKey(d,m);if(!progress[k])progress[k]=new Set();return progress[k]}
+
+function shortName(pid) {
+  if (!P[pid]) return pid;
+  return P[pid].name.match(/（(.+)）/)?.[1] || P[pid].name;
+}
 
 function initWeekDates() {
   const now = new Date();
-  const jsDay = now.getDay(), todayIdx = jsDay === 0 ? 6 : jsDay - 1;
-  // If we have a saved base and it's this week, use it; else compute fresh
+  const jsDay = now.getDay(), todayIdx = jsDay===0?6:jsDay-1;
   let monday;
   if (weekDatesBase) {
-    monday = new Date(weekDatesBase);
-    // Check if today is within this week range
-    const mondayTime = monday.getTime();
-    const todayTime = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-    const daysDiff = Math.floor((todayTime - mondayTime) / 86400000);
-    if (daysDiff < 0 || daysDiff > 6) {
-      // New week — reset to current
-      monday = new Date(now);
-      monday.setDate(now.getDate() - todayIdx);
-      monday.setHours(0,0,0,0);
+    monday = new Date(weekDatesBase+'T00:00:00');
+    const todayTime = new Date(now.getFullYear(),now.getMonth(),now.getDate()).getTime();
+    const diff = Math.floor((todayTime - monday.getTime())/86400000);
+    if (diff < 0 || diff > 6) {
+      monday = new Date(now); monday.setDate(now.getDate()-todayIdx); monday.setHours(0,0,0,0);
       weekDatesBase = dateKey(monday);
     }
   } else {
-    monday = new Date(now);
-    monday.setDate(now.getDate() - todayIdx);
-    monday.setHours(0,0,0,0);
+    monday = new Date(now); monday.setDate(now.getDate()-todayIdx); monday.setHours(0,0,0,0);
     weekDatesBase = dateKey(monday);
   }
   weekDates = [];
-  for (let i = 0; i < 7; i++) {
-    const d = new Date(monday);
-    d.setDate(monday.getDate() + i);
-    weekDates.push(d);
-  }
+  for(let i=0;i<7;i++){const d=new Date(monday);d.setDate(monday.getDate()+i);weekDates.push(d);}
 }
 
-// ══════════════════════════════════════════
+// Advance week to next Monday (saves current week progress to history, clears routine slots)
+function advanceWeek() {
+  // Save current week's weekDatesBase so we can come back
+  prevWeekDatesBase = weekDatesBase;
+
+  const monday = new Date(weekDatesBase+'T00:00:00');
+  monday.setDate(monday.getDate()+7);
+  weekDatesBase = dateKey(monday);
+  weekDates = [];
+  for(let i=0;i<7;i++){const d=new Date(monday);d.setDate(monday.getDate()+i);weekDates.push(d);}
+  // NOTE: do NOT clear calEntries — those are persisted in calendar
+  // Clear only the routine slot progress (weekday-indexed 0-6), they will be fresh for new week
+  for(let d=0;d<7;d++){
+    ['day','night','makeup'].forEach(m => { progress[stateKey(d,m)] = new Set(); });
+  }
+  currentDay = 6; // Sunday of the new week view
+  isNextWeek = true;
+  saveData();
+}
+
+// Go back to previous week (restore routine progress from calEntries)
+function retreatWeek() {
+  if (!prevWeekDatesBase) return;
+  weekDatesBase = prevWeekDatesBase;
+  prevWeekDatesBase = null;
+  const monday = new Date(weekDatesBase+'T00:00:00');
+  weekDates = [];
+  for(let i=0;i<7;i++){const d=new Date(monday);d.setDate(monday.getDate()+i);weekDates.push(d);}
+  // Clear the new-week progress slots so we start fresh when we come back
+  for(let d=0;d<7;d++){
+    ['day','night','makeup'].forEach(m => { progress[stateKey(d,m)] = new Set(); });
+  }
+  currentDay = 6; // Sunday
+  isNextWeek = false;
+  saveData();
+}
+
+// ═══════════════════════════════════════════
 // SCREEN NAVIGATION
-// ══════════════════════════════════════════
+// ═══════════════════════════════════════════
+function isNightMode() { return currentMode === 'night'; }
+
 function goScreen(name) {
   currentScreen = name;
   document.getElementById('screenRoutine').classList.toggle('visible', name==='routine');
   document.getElementById('screenCalendar').classList.toggle('visible', name==='calendar');
   document.getElementById('screenStats').classList.toggle('visible', name==='stats');
-  ['navRoutine','navCalendar','navStats'].forEach(id => document.getElementById(id).classList.remove('active'));
+  ['navRoutine','navCalendar','navStats'].forEach(id=>document.getElementById(id).classList.remove('active'));
   document.getElementById('nav'+name.charAt(0).toUpperCase()+name.slice(1)).classList.add('active');
-  if (name === 'calendar') renderCalendar();
-  if (name === 'stats') renderStats();
+  // Apply night class to calendar container
+  document.getElementById('screenCalendar').classList.toggle('cal-night', isNightMode());
+  if(name==='calendar') renderCalendar();
+  if(name==='stats') renderStats();
 }
 
-// ══════════════════════════════════════════
+// ═══════════════════════════════════════════
 // ROUTINE SCREEN
-// ══════════════════════════════════════════
+// ═══════════════════════════════════════════
 function initDayScroll() {
-  const strip = document.getElementById('dayScroll'); strip.innerHTML = '';
+  const strip = document.getElementById('dayScroll'); strip.innerHTML='';
   ['一','二','三','四','五','六','日'].forEach((label,i) => {
     const btn = document.createElement('button');
-    btn.className = 'day-chip' + (i===currentDay?' active':'');
-    btn.id = 'daychip_' + i;
+    btn.className = 'day-chip'+(i===currentDay?' active':'');
+    btn.id = 'daychip_'+i;
     btn.innerHTML = `<span class="day-label">${label}</span><span class="day-num">${weekDates[i].getMonth()+1}/${weekDates[i].getDate()}</span><span class="done-dot"></span>`;
-    btn.onclick = () => { currentDay = i; renderRoutine(); };
+    btn.onclick = () => { currentDay=i; renderRoutine(); };
     strip.appendChild(btn);
   });
 }
 
 function updateDayScroll() {
   for(let i=0;i<7;i++){
-    const chip=document.getElementById('daychip_'+i); if(!chip)continue;
-    chip.className='day-chip'+(i===currentDay?' active':'')+(getDone(i,'day').size>0||getDone(i,'night').size>0||getDone(i,'makeup').size>0?' has-done':'')+(currentMode==='night'?' day-chip-night':'');
+    const chip = document.getElementById('daychip_'+i); if(!chip)continue;
+    const hasDone = getDone(i,'day').size>0||getDone(i,'night').size>0||getDone(i,'makeup').size>0;
+    chip.className='day-chip'+(i===currentDay?' active':'')+(hasDone?' has-done':'')+(currentMode==='night'?' day-chip-night':'');
   }
 }
 
-function setMode(m){currentMode=m;renderRoutine()}
+function setMode(m){
+  currentMode=m;
+  document.getElementById('screenCalendar').classList.toggle('cal-night', m==='night');
+  document.getElementById('bottomNav').classList.toggle('night-nav', m==='night');
+  renderRoutine();
+}
+
+// Sync routine completion → calEntries for the active day
+function syncToCalendar(dayIdx) {
+  const dateObj = weekDates[dayIdx]; if(!dateObj) return;
+  const dk = dateKey(dateObj);
+  if(!calEntries[dk]) calEntries[dk]={dayDone:[],nightDone:[],mood:'',note:''};
+  // Day: merge day + makeup done into dayDone
+  const dayDone = getDone(dayIdx,'day');
+  const mkDone  = getDone(dayIdx,'makeup');
+  const dayRoutine  = getRoutine(dayIdx,'day');
+  const mkRoutine   = getRoutine(dayIdx,'makeup');
+  const nightDone   = getDone(dayIdx,'night');
+  const nightRoutine= getRoutine(dayIdx,'night');
+  // union of day and makeup products completed
+  const daySet = new Set([
+    ...dayRoutine.steps.filter((_,i)=>dayDone.has(i)),
+    ...mkRoutine.steps.filter((_,i)=>mkDone.has(i))
+  ]);
+  calEntries[dk].dayDone  = [...daySet];
+  calEntries[dk].nightDone= nightRoutine.steps.filter((_,i)=>nightDone.has(i));
+}
 
 function renderRoutine() {
-  const isNight = currentMode === 'night';
-  document.getElementById('app').className = 'app'+(isNight?' night-mode-bg':'');
-  document.getElementById('header').className = 'header'+(isNight?' night-header':'');
-  document.getElementById('modeBar').className = 'mode-bar'+(isNight?' night-mode-bar':'');
-  document.getElementById('progressSection').className = 'progress-section'+(isNight?' night-progress':'');
-  document.getElementById('divider').className = 'divider'+(isNight?' night-divider':'');
-  document.getElementById('appTitle').className = 'app-title'+(isNight?' app-title-night':'');
-  document.getElementById('todayDate').className = 'today-date'+(isNight?' today-date-night':'');
-  document.getElementById('stepList').className = 'step-list'+(isNight?' night-step-list':'');
-  document.getElementById('bottomNav').className = 'bottom-nav'+(isNight?' night-nav':'');
+  const isNight = currentMode==='night';
+  document.getElementById('app').className='app'+(isNight?' night-mode-bg':'');
+  document.getElementById('header').className='header'+(isNight?' night-header':'');
+  document.getElementById('modeBar').className='mode-bar'+(isNight?' night-mode-bar':'');
+  document.getElementById('progressSection').className='progress-section'+(isNight?' night-progress':'');
+  document.getElementById('divider').className='divider'+(isNight?' night-divider':'');
+  document.getElementById('appTitle').className='app-title'+(isNight?' app-title-night':'');
+  document.getElementById('todayDate').className='today-date'+(isNight?' today-date-night':'');
+  document.getElementById('stepList').className='step-list'+(isNight?' night-step-list':'');
+  document.getElementById('bottomNav').className='bottom-nav'+(isNight?' night-nav':'');
 
   ['tabDay','tabNight','tabMakeup'].forEach(id=>document.getElementById(id).classList.remove('active','night-active'));
   document.getElementById(currentMode==='day'?'tabDay':currentMode==='night'?'tabNight':'tabMakeup').classList.add(isNight?'night-active':'active');
@@ -512,20 +586,18 @@ function renderRoutine() {
 
   const list=document.getElementById('stepList'); list.innerHTML='';
 
-  // Reminder
   const rem=document.createElement('div');
   rem.className='reminder-box'+(isNight?' night-reminder':'');
-  rem.innerHTML='「小金條」只用在痘痘，大粉、歐舒丹 或 面膜 後使用。';
+  rem.textContent='「小金條」只用在痘痘，大粉、歐舒丹 或 面膜 後使用。';
   list.appendChild(rem);
 
   routine.steps.forEach((pid,i)=>{
-    const p=P[pid],isDone=done.has(i),isNext=i===trackable.find(idx=>!done.has(idx));
+    const p=P[pid], isDone=done.has(i), isNext=i===trackable.find(idx=>!done.has(idx));
     const card=document.createElement('div');
     card.className=`step-card ${isNight?'night-card':''} ${isDone?'is-done':''} ${isNext?'is-next':''}`;
     card.onclick=()=>{
       if(isDone) done.delete(i); else done.add(i);
-      // Auto-sync to calEntry for today
-      syncTodayToCalendar();
+      syncToCalendar(currentDay);
       saveData();
       renderRoutine();
     };
@@ -536,7 +608,6 @@ function renderRoutine() {
     list.appendChild(card);
   });
 
-  // Done banner
   if(doneCount===trackable.length&&trackable.length>0){
     const b=document.createElement('div');
     b.className='done-banner'+(isNight?' night-done':'');
@@ -547,284 +618,254 @@ function renderRoutine() {
   const rb=document.createElement('button');
   rb.className='reset-btn'+(isNight?' night-reset':'');
   rb.textContent='重置本次進度';
-  rb.onclick=(e)=>{e.stopPropagation();progress[stateKey(currentDay,currentMode)]=new Set();saveData();renderRoutine()};
+  rb.onclick=(e)=>{e.stopPropagation();progress[stateKey(currentDay,currentMode)]=new Set();syncToCalendar(currentDay);saveData();renderRoutine()};
   list.appendChild(rb);
+
+  // 夜間 + 週日：顯示「前往下週」或「回到當週」切換按鈕
+  if(isNight && currentDay === 6){
+    const cb = document.createElement('button');
+    cb.className = 'complete-day-btn';
+    if(isNextWeek){
+      cb.textContent = '← 回到當週';
+      cb.style.background = '#5A4870';
+    } else {
+      cb.textContent = '✓ 本週完成，前往下週';
+    }
+    cb.onclick = (e) => {
+      e.stopPropagation();
+      cb.style.opacity = '0.6';
+      setTimeout(() => {
+        if(isNextWeek){
+          retreatWeek();
+        } else {
+          advanceWeek();
+        }
+        initDayScroll();
+        renderRoutine();
+      }, 400);
+    };
+    list.appendChild(cb);
+  }
 }
 
-// Sync today's routine done state to calEntry
-function syncTodayToCalendar() {
-  const todayDate = weekDates[currentDay];
-  if (!todayDate) return;
-  const dk = dateKey(todayDate);
-  if (!calEntries[dk]) calEntries[dk] = { dayDone:[], nightDone:[], mood:'', note:'' };
-  const dayDone = getDone(currentDay, 'day');
-  const nightDone = getDone(currentDay, 'night');
-  const dayRoutine = getRoutine(currentDay, 'day');
-  const nightRoutine = getRoutine(currentDay, 'night');
-  calEntries[dk].dayDone = dayRoutine.steps.filter((_,i) => dayDone.has(i));
-  calEntries[dk].nightDone = nightRoutine.steps.filter((_,i) => nightDone.has(i));
-}
-
-// ══════════════════════════════════════════
+// ═══════════════════════════════════════════
 // CALENDAR SCREEN
-// ══════════════════════════════════════════
+// ═══════════════════════════════════════════
 function renderCalendar() {
   const now = new Date();
-  if (calYear === undefined) { calYear = now.getFullYear(); calMonth = now.getMonth(); }
-  document.getElementById('calTitle').textContent = `${calYear} 年 ${calMonth+1} 月`;
-  const grid = document.getElementById('calGrid'); grid.innerHTML = '';
+  if(calYear===undefined){calYear=now.getFullYear();calMonth=now.getMonth();}
+  document.getElementById('calTitle').textContent=`${calYear} 年 ${calMonth+1} 月`;
+  const grid=document.getElementById('calGrid'); grid.innerHTML='';
 
-  const firstDay = new Date(calYear, calMonth, 1);
-  const totalDays = new Date(calYear, calMonth+1, 0).getDate();
-  // Mon=0 offset
-  let startOffset = firstDay.getDay() - 1;
-  if (startOffset < 0) startOffset = 6;
+  const firstDay=new Date(calYear,calMonth,1);
+  const totalDays=new Date(calYear,calMonth+1,0).getDate();
+  let startOffset=firstDay.getDay()-1; if(startOffset<0)startOffset=6;
 
-  for (let i = 0; i < startOffset; i++) {
-    const empty = document.createElement('div');
-    empty.className = 'cal-cell empty';
-    grid.appendChild(empty);
+  for(let i=0;i<startOffset;i++){
+    const e=document.createElement('div'); e.className='cal-cell empty'; grid.appendChild(e);
   }
 
-  for (let d = 1; d <= totalDays; d++) {
-    const cellDate = new Date(calYear, calMonth, d);
-    const dk = dateKey(cellDate);
-    const entry = calEntries[dk] || {};
-    const isFuture = cellDate > now && dateKey(cellDate) !== dateKey(now);
-    const isToday = dateKey(cellDate) === dateKey(now);
+  for(let d=1;d<=totalDays;d++){
+    const cellDate=new Date(calYear,calMonth,d);
+    const dk=dateKey(cellDate);
+    const entry=calEntries[dk]||{};
+    const isFuture=cellDate>now&&dk!==dateKey(now);
+    const isToday=dk===dateKey(now);
+    const isSelected=dk===qnDateKey;
 
-    const cell = document.createElement('div');
-    cell.className = 'cal-cell' + (isToday?' today':'') + (isFuture?' future':'');
+    const cell=document.createElement('div');
+    cell.className='cal-cell'+(isToday?' today':'')+(isFuture?' future':'')+(isSelected?' today':'');
+    if(isSelected){cell.classList.add('selected-cell');cell.style.background='rgba(139,94,82,.12)';cell.style.borderColor='var(--rose-deep)';}
 
-    const dateDiv = document.createElement('div');
-    dateDiv.className = 'cal-date';
-    dateDiv.textContent = d;
+    const dateDiv=document.createElement('div');
+    dateDiv.className='cal-date';
+    dateDiv.textContent=d;
     cell.appendChild(dateDiv);
 
-    // Dots
-    const dots = document.createElement('div');
-    dots.className = 'cal-dots';
-    if (entry.dayDone && entry.dayDone.length > 0) {
-      const dot = document.createElement('div'); dot.className='cal-dot dot-day'; dots.appendChild(dot);
-    }
-    if (entry.nightDone && entry.nightDone.length > 0) {
-      const dot = document.createElement('div'); dot.className='cal-dot dot-night'; dots.appendChild(dot);
-    }
-    if (entry.note && entry.note.trim()) {
-      const dot = document.createElement('div'); dot.className='cal-dot dot-note'; dots.appendChild(dot);
-    }
+    const dots=document.createElement('div');
+    dots.className='cal-dots';
+    if(entry.dayDone&&entry.dayDone.length>0){const dot=document.createElement('div');dot.className='cal-dot dot-day';dots.appendChild(dot);}
+    if(entry.nightDone&&entry.nightDone.length>0){const dot=document.createElement('div');dot.className='cal-dot dot-night';dots.appendChild(dot);}
+    if(entry.note&&entry.note.trim()){const dot=document.createElement('div');dot.className='cal-dot dot-note';dots.appendChild(dot);}
     cell.appendChild(dots);
 
-    if (!isFuture) {
-      cell.onclick = () => openModal(dk, cellDate);
+    if(!isFuture){
+      cell.onclick=()=>openQuickNote(dk,cellDate);
     }
     grid.appendChild(cell);
   }
 }
 
-function calPrevMonth() { calMonth--; if(calMonth<0){calMonth=11;calYear--}; renderCalendar(); }
-function calNextMonth() {
+function calPrevMonth(){calMonth--;if(calMonth<0){calMonth=11;calYear--;}renderCalendar();}
+function calNextMonth(){
   const now=new Date();
-  if(calYear===now.getFullYear()&&calMonth===now.getMonth()) return;
-  calMonth++; if(calMonth>11){calMonth=0;calYear++}; renderCalendar();
+  if(calYear===now.getFullYear()&&calMonth===now.getMonth())return;
+  calMonth++;if(calMonth>11){calMonth=0;calYear++;}renderCalendar();
 }
 
-// ── Modal ──
-function openModal(dk, dateObj) {
-  modalDateKey = dk;
-  const entry = calEntries[dk] || {};
+// ── Inline note panel ──
+function openQuickNote(dk, dateObj) {
+  qnDateKey = dk;
+  const entry = calEntries[dk]||{};
   const days=['週日','週一','週二','週三','週四','週五','週六'];
-  document.getElementById('modalDateTitle').textContent =
-    `${dateObj.getMonth()+1} 月 ${dateObj.getDate()} 日`;
-  document.getElementById('modalSubtitle').textContent =
-    days[dateObj.getDay()] + ' · 點選切換完成狀態';
+  document.getElementById('qnDateLabel').textContent=
+    `${dateObj.getMonth()+1} 月 ${dateObj.getDate()} 日 ${days[dateObj.getDay()]}`;
 
-  // Compute which weekday index this date maps to (Mon=0)
-  const wdIdx = dateObj.getDay() === 0 ? 6 : dateObj.getDay() - 1;
-  const dayRoutine = getRoutine(wdIdx, 'day');
-  const nightRoutine = getRoutine(wdIdx, 'night');
+  const wdIdx = dateObj.getDay()===0?6:dateObj.getDay()-1;
+  const dayRoutine  = getRoutine(wdIdx,'day');
+  const nightRoutine= getRoutine(wdIdx,'night');
 
-  // Day pills
-  const dayPills = document.getElementById('modalDayPills');
-  dayPills.innerHTML = '<div style="font-size:10px;color:var(--ink-light);margin-bottom:6px">☀️ 日間</div>';
-  const df = document.createElement('div'); df.className='done-pills'; dayPills.appendChild(df);
-  dayRoutine.steps.forEach(pid => {
-    const pill = document.createElement('span');
-    const done = entry.dayDone && entry.dayDone.includes(pid);
-    pill.className = 'done-pill' + (done?' active':'');
-    pill.textContent = P[pid] ? P[pid].name.match(/（(.+)）/)?.[1] || pid : pid;
-    pill.onclick = () => toggleCalPill(dk, wdIdx, 'day', pid, pill);
-    df.appendChild(pill);
+  // Day pills (include makeup steps union)
+  const allDaySteps = [...new Set([...dayRoutine.steps, ...MAKEUP_STEPS])];
+  const dpRow = document.getElementById('qnDayPills'); dpRow.innerHTML='';
+  allDaySteps.forEach(pid=>{
+    const pill=document.createElement('span');
+    const done=entry.dayDone&&entry.dayDone.includes(pid);
+    pill.className='qn-pill'+(done?' active':'');
+    pill.textContent=shortName(pid);
+    pill.onclick=()=>toggleQnPill(dk,wdIdx,'day',pid,pill);
+    dpRow.appendChild(pill);
   });
 
   // Night pills
-  const nightPills = document.getElementById('modalNightPills');
-  nightPills.innerHTML = '<div style="font-size:10px;color:var(--ink-light);margin:10px 0 6px">🌙 夜間</div>';
-  const nf = document.createElement('div'); nf.className='done-pills'; nightPills.appendChild(nf);
-  nightRoutine.steps.forEach(pid => {
-    const pill = document.createElement('span');
-    const done = entry.nightDone && entry.nightDone.includes(pid);
-    pill.className = 'done-pill' + (done?' active':'');
-    pill.textContent = P[pid] ? P[pid].name.match(/（(.+)）/)?.[1] || pid : pid;
-    pill.onclick = () => toggleCalPill(dk, wdIdx, 'night', pid, pill);
-    nf.appendChild(pill);
+  const npRow=document.getElementById('qnNightPills'); npRow.innerHTML='';
+  nightRoutine.steps.forEach(pid=>{
+    const pill=document.createElement('span');
+    const done=entry.nightDone&&entry.nightDone.includes(pid);
+    pill.className='qn-pill'+(done?' active':'');
+    pill.textContent=shortName(pid);
+    pill.onclick=()=>toggleQnPill(dk,wdIdx,'night',pid,pill);
+    npRow.appendChild(pill);
   });
 
   // Mood
-  document.querySelectorAll('.mood-btn').forEach(btn => {
-    btn.classList.toggle('selected', btn.dataset.mood === (entry.mood||''));
+  document.querySelectorAll('.qn-mood-btn').forEach(btn=>{
+    btn.classList.toggle('selected', btn.dataset.mood===(entry.mood||''));
   });
+  document.getElementById('qnTextarea').value=entry.note||'';
 
-  // Note
-  document.getElementById('noteTextarea').value = entry.note || '';
-
-  document.getElementById('dayModal').classList.add('open');
-  document.getElementById('modalOverlay').classList.add('open');
+  document.getElementById('quickNoteStrip').style.display='block';
+  renderCalendar(); // re-render to show selection highlight
+  // Scroll panel into view
+  setTimeout(()=>document.getElementById('quickNoteStrip').scrollIntoView({behavior:'smooth',block:'nearest'}),50);
 }
 
-function toggleCalPill(dk, wdIdx, mode, pid, pillEl) {
-  if (!calEntries[dk]) calEntries[dk] = { dayDone:[], nightDone:[], mood:'', note:'' };
-  const arr = mode === 'day' ? calEntries[dk].dayDone : calEntries[dk].nightDone;
-  const idx = arr.indexOf(pid);
-  if (idx > -1) { arr.splice(idx,1); pillEl.classList.remove('active'); }
-  else { arr.push(pid); pillEl.classList.add('active'); }
+function toggleQnPill(dk, wdIdx, mode, pid, pillEl) {
+  if(!calEntries[dk]) calEntries[dk]={dayDone:[],nightDone:[],mood:'',note:''};
+  const arr = mode==='day'?calEntries[dk].dayDone:calEntries[dk].nightDone;
+  const idx=arr.indexOf(pid);
+  if(idx>-1){arr.splice(idx,1);pillEl.classList.remove('active');}
+  else{arr.push(pid);pillEl.classList.add('active');}
   saveData();
   renderCalendar();
 }
 
-function selectMood(m) {
-  document.querySelectorAll('.mood-btn').forEach(btn => btn.classList.toggle('selected', btn.dataset.mood===m));
+function qnSelectMood(m) {
+  document.querySelectorAll('.qn-mood-btn').forEach(btn=>btn.classList.toggle('selected',btn.dataset.mood===m));
 }
 
-function saveModalEntry() {
-  if (!modalDateKey) return;
-  if (!calEntries[modalDateKey]) calEntries[modalDateKey] = { dayDone:[], nightDone:[], mood:'', note:'' };
-  const selected = document.querySelector('.mood-btn.selected');
-  calEntries[modalDateKey].mood = selected ? selected.dataset.mood : '';
-  calEntries[modalDateKey].note = document.getElementById('noteTextarea').value.trim();
+function saveQuickNote() {
+  if(!qnDateKey) return;
+  if(!calEntries[qnDateKey]) calEntries[qnDateKey]={dayDone:[],nightDone:[],mood:'',note:''};
+  const selected=document.querySelector('.qn-mood-btn.selected');
+  calEntries[qnDateKey].mood=selected?selected.dataset.mood:'';
+  calEntries[qnDateKey].note=document.getElementById('qnTextarea').value.trim();
   saveData();
   renderCalendar();
-  closeModal();
+  // Visual feedback
+  const btn=document.querySelector('.qn-save-btn');
+  btn.textContent='已儲存 ✓'; btn.style.background='var(--sage)';
+  setTimeout(()=>{btn.textContent='儲存';btn.style.background='';},1200);
 }
 
-function closeModal() {
-  document.getElementById('dayModal').classList.remove('open');
-  document.getElementById('modalOverlay').classList.remove('open');
-  modalDateKey = null;
-}
-
-// ══════════════════════════════════════════
+// ═══════════════════════════════════════════
 // STATS SCREEN
-// ══════════════════════════════════════════
+// ═══════════════════════════════════════════
 function renderStats() {
-  const now = new Date();
-  const container = document.getElementById('statsContent');
-  container.innerHTML = '';
+  const now=new Date();
+  const container=document.getElementById('statsContent'); container.innerHTML='';
 
-  // Title
-  const title = document.createElement('div');
-  title.className = 'stats-title';
-  title.textContent = '保養紀錄';
+  const title=document.createElement('div');
+  title.className='stats-title'; title.textContent='保養紀錄';
   container.appendChild(title);
 
-  // Compute streak
-  let streak = 0;
-  const check = new Date(now);
-  while (true) {
-    const dk = dateKey(check);
-    const e = calEntries[dk];
-    if (e && ((e.dayDone&&e.dayDone.length>0)||(e.nightDone&&e.nightDone.length>0))) {
-      streak++;
-      check.setDate(check.getDate()-1);
+  // Streak
+  let streak=0;
+  const chk=new Date(now);
+  while(true){
+    const dk=dateKey(chk), e=calEntries[dk];
+    if(e&&((e.dayDone&&e.dayDone.length>0)||(e.nightDone&&e.nightDone.length>0))){
+      streak++; chk.setDate(chk.getDate()-1);
     } else break;
-    if (streak > 365) break;
+    if(streak>365)break;
   }
 
-  // Streak card
-  const sc = document.createElement('div');
-  sc.className = 'stat-card';
-  sc.innerHTML = `<div class="stat-card-title">連續保養天數</div>
-    <div class="streak-num">${streak}</div>
-    <div class="streak-label">天 🌸</div>`;
+  const sc=document.createElement('div'); sc.className='stat-card';
+  sc.innerHTML=`<div class="stat-card-title">連續保養天數</div><div class="streak-num">${streak}</div><div class="streak-label">天 🌸</div>`;
   container.appendChild(sc);
 
-  // Monthly summary (last 4 weeks)
-  const mc = document.createElement('div');
-  mc.className = 'stat-card';
-  mc.innerHTML = '<div class="stat-card-title">近 28 天統計</div><div class="month-bar" id="statsBarDay"></div><div class="month-bar" id="statsBarNight"></div>';
+  // 4-week bars
+  const mc=document.createElement('div'); mc.className='stat-card';
+  mc.innerHTML='<div class="stat-card-title">近 28 天統計</div><div class="month-bar" id="statsBarDay"></div><div class="month-bar" id="statsBarNight"></div>';
   container.appendChild(mc);
 
-  let dayCount=0, nightCount=0, totalDays=0;
-  const rows = {day:[], night:[]};
-  for (let w=3; w>=0; w--) {
+  const rows={day:[],night:[]};
+  for(let w=3;w>=0;w--){
     let wd=0,wn=0;
-    for (let d=6; d>=0; d--) {
-      const check2 = new Date(now);
-      check2.setDate(now.getDate() - w*7 - d);
-      const dk = dateKey(check2);
-      const e = calEntries[dk]||{};
-      if(e.dayDone&&e.dayDone.length>0) {wd++;dayCount++;}
-      if(e.nightDone&&e.nightDone.length>0) {wn++;nightCount++;}
-      totalDays++;
+    for(let d=6;d>=0;d--){
+      const c2=new Date(now); c2.setDate(now.getDate()-w*7-d);
+      const e=calEntries[dateKey(c2)]||{};
+      if(e.dayDone&&e.dayDone.length>0)wd++;
+      if(e.nightDone&&e.nightDone.length>0)wn++;
     }
     rows.day.push(wd); rows.night.push(wn);
   }
 
-  // Render bars
-  setTimeout(() => {
-    const barDay = document.getElementById('statsBarDay');
-    const barNight = document.getElementById('statsBarNight');
-    if (!barDay || !barNight) return;
-    barDay.innerHTML = '<div style="font-size:10px;color:var(--ink-light);margin-bottom:4px">☀️ 日間</div>';
-    barNight.innerHTML = '<div style="font-size:10px;color:var(--ink-light);margin-bottom:4px">🌙 夜間</div>';
-    rows.day.forEach((v,i) => {
-      barDay.innerHTML += `<div class="bar-row"><div class="bar-label">W${i+1}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.round(v/7*100)}%"></div></div><div class="bar-count">${v}</div></div>`;
-    });
-    rows.night.forEach((v,i) => {
-      barNight.innerHTML += `<div class="bar-row"><div class="bar-label">W${i+1}</div><div class="bar-track"><div class="bar-fill night-bar" style="width:${Math.round(v/7*100)}%"></div></div><div class="bar-count">${v}</div></div>`;
-    });
-  }, 0);
+  setTimeout(()=>{
+    const bd=document.getElementById('statsBarDay');
+    const bn=document.getElementById('statsBarNight');
+    if(!bd||!bn)return;
+    bd.innerHTML='<div style="font-size:10px;color:var(--ink-light);margin-bottom:4px">☀️ 日間（含化妝日）</div>';
+    bn.innerHTML='<div style="font-size:10px;color:var(--ink-light);margin-bottom:4px">🌙 夜間</div>';
+    rows.day.forEach((v,i)=>{ bd.innerHTML+=`<div class="bar-row"><div class="bar-label">W${i+1}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.round(v/7*100)}%"></div></div><div class="bar-count">${v}</div></div>`; });
+    rows.night.forEach((v,i)=>{ bn.innerHTML+=`<div class="bar-row"><div class="bar-label">W${i+1}</div><div class="bar-track"><div class="bar-fill night-bar" style="width:${Math.round(v/7*100)}%"></div></div><div class="bar-count">${v}</div></div>`; });
+  },0);
 
   // Totals
-  const tc = document.createElement('div');
-  tc.className = 'stat-card';
-  tc.innerHTML = `<div class="stat-card-title">累計完成</div>
-    <div class="stat-row"><span class="stat-row-label">日間保養次數</span><span class="stat-row-val">${Object.values(calEntries).filter(e=>e.dayDone&&e.dayDone.length>0).length} 次</span></div>
+  const tc=document.createElement('div'); tc.className='stat-card';
+  tc.innerHTML=`<div class="stat-card-title">累計完成</div>
+    <div class="stat-row"><span class="stat-row-label">日間保養次數（含化妝日）</span><span class="stat-row-val">${Object.values(calEntries).filter(e=>e.dayDone&&e.dayDone.length>0).length} 次</span></div>
     <div class="stat-row"><span class="stat-row-label">夜間保養次數</span><span class="stat-row-val">${Object.values(calEntries).filter(e=>e.nightDone&&e.nightDone.length>0).length} 次</span></div>
     <div class="stat-row"><span class="stat-row-label">筆記數量</span><span class="stat-row-val">${Object.values(calEntries).filter(e=>e.note&&e.note.trim()).length} 則</span></div>`;
   container.appendChild(tc);
 
   // Recent notes
-  const noteDays = Object.entries(calEntries)
+  const noteDays=Object.entries(calEntries)
     .filter(([,e])=>e.note&&e.note.trim())
     .sort((a,b)=>b[0].localeCompare(a[0]))
     .slice(0,5);
-
-  if (noteDays.length > 0) {
-    const nc = document.createElement('div');
-    nc.className = 'stat-card';
-    nc.innerHTML = '<div class="stat-card-title">最近筆記</div><div class="recent-notes">' +
-      noteDays.map(([dk,e]) => {
-        const d = new Date(dk+'T12:00:00');
-        return `<div class="note-entry">
-          <div class="note-entry-date">${d.getMonth()+1}/${d.getDate()} <span class="mood-display">${e.mood||''}</span></div>
-          <div class="note-entry-text">${e.note}</div>
-        </div>`;
-      }).join('') + '</div>';
+  if(noteDays.length>0){
+    const nc=document.createElement('div'); nc.className='stat-card';
+    nc.innerHTML='<div class="stat-card-title">最近筆記</div>'+
+      noteDays.map(([dk,e])=>{
+        const d=new Date(dk+'T12:00:00');
+        return `<div class="note-entry"><div class="note-entry-date">${d.getMonth()+1}/${d.getDate()} <span class="mood-display">${e.mood||''}</span></div><div class="note-entry-text">${e.note}</div></div>`;
+      }).join('');
     container.appendChild(nc);
   }
 }
 
-// ══════════════════════════════════════════
+// ═══════════════════════════════════════════
 // INIT
-// ══════════════════════════════════════════
-const n = new Date(), jd = n.getDay();
-currentDay = jd === 0 ? 6 : jd - 1;
-document.getElementById('todayDate').innerHTML = `${['週日','週一','週二','週三','週四','週五','週六'][jd]}&nbsp;${n.getMonth()+1}/${n.getDate()}`;
-
+// ═══════════════════════════════════════════
+const n=new Date(), jd=n.getDay();
+currentDay=jd===0?6:jd-1;
+document.getElementById('todayDate').innerHTML=`${['週日','週一','週二','週三','週四','週五','週六'][jd]}&nbsp;${n.getMonth()+1}/${n.getDate()}`;
 initWeekDates();
 initDayScroll();
 renderRoutine();
+// Sync cal-night state on load
+document.getElementById('screenCalendar').classList.toggle('cal-night', currentMode==='night');
 </script>
 </body>
 </html>
